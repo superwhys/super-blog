@@ -1,4 +1,4 @@
-package postgetter
+package postmanager
 
 import (
 	"context"

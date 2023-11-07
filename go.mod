@@ -5,7 +5,7 @@ go 1.20
 require (
 	github.com/gin-gonic/gin v1.9.0
 	github.com/google/go-github/v53 v53.2.0
-	github.com/yazl-tech/yazl v0.0.0-20231105044705-63b2f504c397
+	github.com/yazl-tech/yazl v0.0.0-20231107095134-b517c10132e7
 )
 
 require (

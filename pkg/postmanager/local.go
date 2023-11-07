@@ -1,23 +1,20 @@
-package postgetter
+package postmanager
 
 import (
 	"context"
+	"encoding/base64"
 	"fmt"
 	"os"
 	"path/filepath"
-	"regexp"
-	"time"
+	"sync"
 
 	"github.com/pkg/errors"
 	"github.com/superwhys/superBlog/models"
 	"github.com/yazl-tech/yazl/utils/lg"
 )
 
-var (
-	postFilePattern = regexp.MustCompile(`(\d{4}-\d{2}-\d{2})-(.*).md`)
-)
-
 type LocalGetter struct {
+	sync.RWMutex
 	postBaseDir string
 	posts       map[string]*models.BlogItem
 }
@@ -32,12 +29,6 @@ func NewLocalPostGetter(postBaseDir string) *LocalGetter {
 			continue
 		}
 
-		fileSubMatch := postFilePattern.FindStringSubmatch(entry.Name())
-		if len(fileSubMatch) != 3 {
-			lg.Warnf("file: %v not a standard post file", entry.Name())
-			continue
-		}
-
 		content, err := readFile(filepath.Join(postBaseDir, entry.Name()))
 		lg.PanicError(err)
 
@@ -46,11 +37,6 @@ func NewLocalPostGetter(postBaseDir string) *LocalGetter {
 			lg.Errorf("parse %v content error: %v", entry.Name(), err)
 			continue
 		}
-
-		t, _ := time.Parse(time.DateOnly, fileSubMatch[1])
-		blogItem.PostedTime = t.Format(fmt.Sprintf("Posted By %v on Jan 02, 2006", blogItem.MetaData.Author))
-		blogItem.Title = fileSubMatch[2]
-		blogItem.ToEndPoint = t.Format(fmt.Sprintf("/2006/01/02/%v", fileSubMatch[2]))
 
 		posts[entry.Name()] = blogItem
 	}
@@ -62,6 +48,9 @@ func NewLocalPostGetter(postBaseDir string) *LocalGetter {
 }
 
 func (l *LocalGetter) GetPostList(ctx context.Context) (*models.BlogListItems, error) {
+	l.RLock()
+	defer l.RUnlock()
+
 	var posts []*models.BlogItem
 	for _, value := range l.posts {
 		posts = append(posts, value)
@@ -72,6 +61,9 @@ func (l *LocalGetter) GetPostList(ctx context.Context) (*models.BlogListItems, e
 }
 
 func (l *LocalGetter) GetSpecifyPost(ctx context.Context, postName string) (*models.BlogItem, error) {
+	l.RLock()
+	defer l.RUnlock()
+
 	post, exists := l.posts[postName]
 	if !exists {
 		return nil, fmt.Errorf("post: %v not exists!", postName)
@@ -85,4 +77,43 @@ func readFile(path string) (string, error) {
 		return "", errors.Wrap(err, "read file")
 	}
 	return string(b), nil
+}
+
+func writePostToFile(ctx context.Context, basePostDir string, blogItem *models.BlogItem) error {
+	file, err := os.Create(filepath.Join(basePostDir, blogItem.FileName))
+	if err != nil {
+		return errors.Wrap(err, "create file")
+	}
+
+	content, err := base64.StdEncoding.DecodeString(blogItem.RawContent)
+	if err != nil {
+		return errors.Wrap(err, "decode raw content")
+	}
+
+	_, err = file.Write(content)
+	if err != nil {
+		return errors.Wrap(err, "write content to string")
+	}
+	return nil
+}
+
+func (l *LocalGetter) AddOrUpdatePost(ctx context.Context, item *models.BlogItem) error {
+	l.Lock()
+	defer l.Unlock()
+
+	if err := writePostToFile(ctx, l.postBaseDir, item); err != nil {
+		lg.Errorc(ctx, "write new post to file error: %v", err)
+		return errors.Wrap(err, "writeNewPostToFile")
+	}
+
+	l.posts[item.FileName] = item
+	return nil
+}
+
+func (l *LocalGetter) DeletePost(ctx context.Context, fileName string) error {
+	l.Lock()
+	defer l.Unlock()
+
+	delete(l.posts, fileName)
+	return nil
 }

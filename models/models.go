@@ -32,6 +32,7 @@ type BlogItem struct {
 	FileName    string    `json:"fileName"`
 	Title       string    `json:"title"`
 	SubTitle    string    `json:"subTitle"`
+	RawContent  string    `json:"-"`
 	PostContent string    `json:"postContent"`
 	PostedTime  string    `json:"postedTime"`
 	ToEndPoint  string    `json:"toEndPoint"`
@@ -39,4 +40,14 @@ type BlogItem struct {
 
 type BlogListItems struct {
 	Items []*BlogItem `json:"items"`
+}
+
+type GithubCommit struct {
+	Added    []string `json:"added" form:"added"`
+	Modified []string `json:"modified" form:"modified"`
+	Removed  []string `json:"removed" form:"removed"`
+}
+
+type GithubPushEvent struct {
+	HeadCommit *GithubCommit `json:"head_commit" form:"head_commit"`
 }

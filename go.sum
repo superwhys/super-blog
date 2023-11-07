@@ -416,6 +416,8 @@ github.com/ugorji/go/codec v1.2.9 h1:rmenucSohSTiyL09Y+l2OCk+FrMxGMzho2+tjr5ticU
 github.com/ugorji/go/codec v1.2.9/go.mod h1:UNopzCgEMSXjBc6AOMqYvWC1ktqTAfzJZUZgYf6w6lg=
 github.com/yazl-tech/yazl v0.0.0-20231105044705-63b2f504c397 h1:kUclZPpIGN2EEDzpGeMcl97LRnoxNVO/187seMQkqHA=
 github.com/yazl-tech/yazl v0.0.0-20231105044705-63b2f504c397/go.mod h1:Ejk3MKH5QeAdqleaGaEcHpxJBwUrK1tQMwOKKYyKRhg=
+github.com/yazl-tech/yazl v0.0.0-20231107095134-b517c10132e7 h1:Uni52QG28fMCqsh6Itwq45lcOoU5a9fv7txXOZKvcSg=
+github.com/yazl-tech/yazl v0.0.0-20231107095134-b517c10132e7/go.mod h1:Ejk3MKH5QeAdqleaGaEcHpxJBwUrK1tQMwOKKYyKRhg=
 github.com/yuin/goldmark v1.1.25/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.1.27/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.1.32/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
