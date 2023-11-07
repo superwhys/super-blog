@@ -1,8 +1,8 @@
 <template>
   <div class="baseRight">
-    <a class="baseRightTitle" :href="toEndPoint">
+    <router-link class="baseRightTitle" :to="toEndPoint">
       <slot name="rightModuleTitle"></slot>
-    </a>
+    </router-link>
     <div class="baseRightMain">
       <slot name="rightModuleMain"></slot>
     </div>
@@ -25,7 +25,7 @@ export default {
 .baseRight {
   color: gray;
   border-top: 1px solid var(--solidLineColor);
-  padding: 10px 0;
+  padding: 10px 0 20px 0;
   display: flex;
   flex-direction: column;
 }
@@ -42,5 +42,11 @@ export default {
 
 .baseRightTitle:hover {
   color: var(--hightlight);
+}
+
+.baseRightMain {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 </style>

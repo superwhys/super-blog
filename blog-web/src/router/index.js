@@ -6,6 +6,7 @@ Vue.use(VueRouter)
 const homePage = () => import('@/views/homePage.vue')
 const aboutPage = () => import('@/views/aboutPage.vue')
 const tagsPage = () => import('@/views/tagsPage.vue')
+const blogPage = () => import('@/views/blogPage.vue')
 
 
 const routes = [
@@ -27,6 +28,11 @@ const routes = [
     path: '/tags',
     name: 'tags',
     component: tagsPage
+  },
+  {
+    path: '/blog/:year/:month/:day/:name',
+    name: 'blog',
+    component: blogPage
   }
 ]
 

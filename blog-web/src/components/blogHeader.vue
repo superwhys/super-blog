@@ -1,18 +1,16 @@
 <template>
   <div class="header-container">
     <div class="header-content">
-      <div class="header-menu">
-        <div class="header-menu-left">
-          SuperYong
-        </div>
-        <div class="header-menu-right">
-          <el-menu router mode="horizontal" text-color="#303133" active-text-color="#fff">
-            <el-menu-item index="/home">Home</el-menu-item>
-            <el-menu-item index="/about">About</el-menu-item>
-            <el-menu-item index="/tags">Contact</el-menu-item>
-          </el-menu>
-        </div>
-      </div>
+<!--      <div class="header-menu">-->
+<!--        <div class="header-menu-left">-->
+<!--          SuperYong-->
+<!--        </div>-->
+<!--        <div class="header-menu-right">-->
+<!--          <router-link to="/home">HOME</router-link>-->
+<!--          <router-link to="/about">ABOUT</router-link>-->
+<!--          <router-link to="/tags">TAGS</router-link>-->
+<!--        </div>-->
+<!--      </div>-->
       <div class="header-text">
         <slot name="headerImgInnerShow">
           <h1>Welcome to My Blog</h1>
@@ -25,9 +23,21 @@
 <script>
 export default {
   name: "blogHeader",
+  // props: {
+  //   headerImgUrl: {
+  //     type: String,
+  //     default: require("@/assets/post-bg-desk.jpg")
+  //   }
+  // },
+  // computed: {
+  //   backgroundImageStyle() {
+  //     return {
+  //       backgroundImage: `url(${this.headerImgUrl})`
+  //     }
+  //   }
+  // },
   data() {
     return {
-      headerImgUrl: require("@/assets/post-bg-desk.jpg")
     }
   }
 }
@@ -35,7 +45,7 @@ export default {
 
 <style scoped>
 .header-container {
-  background-image: url('@/assets/post-bg-desk.jpg');
+  overflow: visible;
   background-size: cover;
   background-position: center;
   color: #333;
@@ -46,32 +56,15 @@ export default {
   justify-content: flex-start;
 }
 
-.el-menu {
-  background-color: transparent !important;
-  border: 0 !important;
-}
-
-.el-menu-item {
-  font-weight: bold;
-}
-
-.header-menu-left .el-menu-item {
-  font-size: 23px;
-}
-
-.el-menu-item:hover {
-  background-color: transparent !important;
-}
-
-.el-menu-item.is-active {
-  background-color: transparent !important;
-}
-
 .header-menu {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  height: 15%;
+  height: 50px;
+
+  position: sticky;
+  z-index: 1000;
+  top: 0;
 }
 
 .header-menu-left {
@@ -85,6 +78,19 @@ export default {
 
 .header-menu-right {
   display: flex;
+  flex-direction: row;
+}
+
+.header-menu-right a {
+  text-decoration: none;
+  color: white;
+  font-size: 12px;
+  font-weight: 900;
+  margin: 20px 20px 20px 20px;
+}
+
+.header-menu-right a:hover {
+  color: #d2cdcd;
 }
 
 .header-content {

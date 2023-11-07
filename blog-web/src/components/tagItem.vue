@@ -1,7 +1,7 @@
 <template>
-  <a class="tagItem" :href="toEndPoint">
+  <router-link class="tagItem" :to="toEndPoint">
     {{ text }}
-  </a>
+  </router-link>
 </template>
 
 <script>

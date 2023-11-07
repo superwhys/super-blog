@@ -8,8 +8,9 @@
               v-for="item in postList"
               :title="item.title"
               :sub-title="item.subTitle"
-              :content="item.Content"
-              :meta="item.Meta"
+              :post-content="item.postContent"
+              :meta-data="item. metaData"
+              :to-end-point="item.toEndPoint"
           >
           </blog-list-item>
         </div>
@@ -45,26 +46,9 @@ export default {
         {
           title: "Golang详解",
           subTitle: "Golang 底层原理详解",
-          Content: "前沿 这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿",
-          Meta: "Posted by SuperYong on March 1, 2023"
-        },
-        {
-          title: "Golang详解",
-          subTitle: "Golang 底层原理详解",
-          Content: "前沿 这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿",
-          Meta: "Posted by SuperYong on March 1, 2023"
-        },
-        {
-          title: "Golang详解",
-          subTitle: "Golang 底层原理详解",
-          Content: "前沿 这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿",
-          Meta: "Posted by SuperYong on March 1, 2023"
-        },
-        {
-          title: "Golang详解",
-          subTitle: "Golang 底层原理详解",
-          Content: "前沿 这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿",
-          Meta: "Posted by SuperYong on March 1, 2023"
+          postContent: "前沿 这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿这是前沿",
+          metaData: "Posted by SuperYong on March 1, 2023",
+          toEndPoint: "/2023/11/03/golang"
         },
       ]
     }

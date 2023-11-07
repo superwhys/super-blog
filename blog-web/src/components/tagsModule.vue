@@ -22,7 +22,7 @@ export default {
   components: {BaseMainRightModule, TagItem},
   props: {
     tags: {
-      type: Object,
+      type: Array,
       default: [{text: "", toEndPoint: "#"}]
     }
   }

@@ -1,11 +1,11 @@
 <template>
   <div class="blogItem">
-    <a :href="toEndPoint">
+    <router-link :to="'/blog'+toEndPoint">
       <h2 class="postTitle">{{ title }}</h2>
       <h3 class="postSubtitle">{{ subTitle }}</h3>
-      <div class="postContentPreview">{{ Content }}</div>
-    </a>
-    <p class="postMeta">{{ Meta }}</p>
+      <div class="postContentPreview">{{ postContent }}</div>
+    </router-link>
+    <p class="postMeta">{{ metaData }}</p>
   </div>
 </template>
 
@@ -19,8 +19,8 @@ export default {
     },
     title: String,
     subTitle: String,
-    Meta: String,
-    Content: String,
+    metaData: String,
+    postContent: String,
   },
   data() {
     return {}

@@ -5,11 +5,11 @@
         ABOUT ME
       </template>
       <template v-slot:rightModuleMain>
-        <a href="/about">
-          <img width="100" height="100" :src=personLogo alt="">
-        </a>
-        <p>Talk is cheap, show me the code!</p>
-        <p>✉️ superyong4869@163.com</p>
+        <router-link to="/about">
+          <img class="personLogo" width="200" height="200" :src=personLogo alt="">
+        </router-link>
+        <p class="aboutModuleText">Talk is cheap, show me the code!</p>
+        <p class="aboutModuleText">✉️ superyong4869@163.com</p>
       </template>
     </base-main-right-module>
   </div>
@@ -33,5 +33,13 @@ export default {
 .aboutMeModule p {
   text-align: left;
   font-size: 13px;
+}
+
+.personLogo {
+  border-radius: 10px;
+}
+
+.aboutModuleText {
+  margin: 5px 0;
 }
 </style>
