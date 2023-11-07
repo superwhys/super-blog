@@ -4,11 +4,13 @@ import (
 	"context"
 	"net/http"
 	"path/filepath"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
 	"github.com/superwhys/superBlog/models"
 	"github.com/superwhys/superBlog/pkg/postmanager"
+	"github.com/superwhys/superBlog/pkg/share"
 	"github.com/yazl-tech/yazl/utils/lg"
 	"golang.org/x/sync/errgroup"
 )
@@ -39,8 +41,14 @@ func handleNewOrModifyFile(ctx context.Context, files []string, localGetter *pos
 	grp.SetLimit(4)
 	for _, file := range files {
 		file := file
+		lg.Debugc(ctx, "get file: %v", file)
+		if !strings.HasPrefix(file, share.BlogPostPrefix) {
+			lg.Debugc(ctx, "file: %v not blog-posts file", file)
+			continue
+		}
+
 		grp.Go(func() error {
-			blogItem, err := githubGetter.GetSpecifyPost(ctx, filepath.Base(file))
+			blogItem, err := githubGetter.GetSpecifyPost(ctx, file)
 			if err != nil {
 				lg.Errorc(ctx, "github get post content error: %v", err)
 				return errors.Wrap(err, "github get post content")
