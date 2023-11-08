@@ -6,8 +6,8 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/superwhys/goutils/lg"
 	"github.com/superwhys/superBlog/models"
-	"github.com/yazl-tech/yazl/utils/lg"
 )
 
 var (

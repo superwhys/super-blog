@@ -5,11 +5,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/go-github/v53/github"
+	"github.com/superwhys/goutils/flags"
+	"github.com/superwhys/goutils/lg"
+	"github.com/superwhys/goutils/service"
 	"github.com/superwhys/superBlog/pkg/postmanager"
 	"github.com/superwhys/superBlog/server"
-	"github.com/yazl-tech/yazl/service"
-	"github.com/yazl-tech/yazl/utils/flags"
-	"github.com/yazl-tech/yazl/utils/lg"
 	"golang.org/x/oauth2"
 )
 
@@ -38,8 +38,7 @@ func main() {
 	}
 
 	blogSrv := server.NewBlogServer(localGetter, githubGetter, githubSecretToken(), autoHookFileChange())
-
-	srv := service.NewYazlService(
+	srv := service.NewSuperService(
 		service.WithHTTPCORS(),
 		service.WithPprof(),
 		service.WithHttpHandler("/", blogSrv.Handler()),

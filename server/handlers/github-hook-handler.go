@@ -8,10 +8,10 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
+	"github.com/superwhys/goutils/lg"
 	"github.com/superwhys/superBlog/models"
 	"github.com/superwhys/superBlog/pkg/postmanager"
 	"github.com/superwhys/superBlog/pkg/share"
-	"github.com/yazl-tech/yazl/utils/lg"
 	"golang.org/x/sync/errgroup"
 )
 

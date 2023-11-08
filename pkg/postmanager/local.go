@@ -9,8 +9,8 @@ import (
 	"sync"
 
 	"github.com/pkg/errors"
+	"github.com/superwhys/goutils/lg"
 	"github.com/superwhys/superBlog/models"
-	"github.com/yazl-tech/yazl/utils/lg"
 )
 
 type LocalGetter struct {

@@ -4,10 +4,10 @@ import (
 	"context"
 
 	"github.com/gin-gonic/gin"
+	"github.com/superwhys/goutils/lg"
 	"github.com/superwhys/superBlog/pkg/postmanager"
 	"github.com/superwhys/superBlog/server/handlers"
 	"github.com/superwhys/superBlog/server/handlers/middlewares"
-	"github.com/yazl-tech/yazl/utils/lg"
 )
 
 type BlogServer struct {
