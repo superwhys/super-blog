@@ -1,0 +1,5 @@
+port: 29913
+debug: true
+autoHookFileChange: true
+githubToken: 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
+basePostDir: ./blog-posts
