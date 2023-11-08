@@ -41,6 +41,15 @@ func (bs *BlogServer) registerPostHandlers(base *gin.RouterGroup, handlerFuncs .
 	}
 }
 
+func (bs *BlogServer) registerTagHandlers(base *gin.RouterGroup, handlerFuncs ...gin.HandlerFunc) {
+	tagGroup := base.Group("/tag")
+	{
+		tagGroup.GET("/", handlers.GetTagsHandler(bs.ctx, bs.localPostGetter))
+		tagGroup.GET("/info", handlers.GetTagsInfoHandler(bs.ctx, bs.localPostGetter))
+		tagGroup.GET("/info/:tag", handlers.GetSpecifyTagInfoHandler(bs.ctx, bs.localPostGetter))
+	}
+}
+
 func (bs *BlogServer) registerGithubHandlers(base *gin.RouterGroup, handlerFuncs ...gin.HandlerFunc) {
 	githubGroup := base.Group("/github")
 	{
@@ -51,6 +60,7 @@ func (bs *BlogServer) registerGithubHandlers(base *gin.RouterGroup, handlerFuncs
 func (bs *BlogServer) Handler() *gin.Engine {
 	blogGroup := bs.engine.Group("/blog")
 	bs.registerPostHandlers(blogGroup)
+	bs.registerTagHandlers(blogGroup)
 	if bs.autoHookFileChange {
 		bs.registerGithubHandlers(blogGroup, middlewares.GithubVerifyMiddleware(bs.ctx, bs.secretToken))
 	}
