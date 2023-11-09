@@ -19,7 +19,6 @@ var (
 	githubToken        = flags.String("githubToken", "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", "set the github api token")
 	githubSecretToken  = flags.String("githubSecretToken", "SjpvYt4nQVTZ", "set github webhook secret token")
 	basePostDir        = flags.String("basePostDir", "./blog-posts", "set the github api token")
-	staticDir          = flags.String("staticDir", "./blog-web/dist", "set the static dir")
 	autoHookFileChange = flags.Bool("autoHookFileChange", false, "Whether to automatically detect changes of file in github repository")
 )
 
@@ -39,8 +38,7 @@ func main() {
 		githubGetter = postmanager.NewGithubGetter(client)
 	}
 
-	staticPath := staticDir()
-	box := packr.New("blog", staticPath)
+	box := packr.New("blogBox", "./blog-web/dist")
 	_, err := box.FindString("index.html")
 	lg.PanicError(err)
 
