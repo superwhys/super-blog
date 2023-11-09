@@ -13,22 +13,26 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: homePage
+    component: homePage,
+    meta: { keepAlive: true }
   },
   {
     path: '/about',
     name: 'about',
-    component: aboutPage
+    component: aboutPage,
+    meta: { keepAlive: true }
   },
   {
     path: '/tag/:tag?',
     name: 'tag',
-    component: tagsPage
+    component: tagsPage,
+    meta: { keepAlive: true }
   },
   {
     path: '/post/:year/:month/:day/:name',
     name: 'blog',
-    component: blogPage
+    component: blogPage,
+    meta: { keepAlive: false }
   }
 ]
 

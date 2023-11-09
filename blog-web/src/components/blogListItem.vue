@@ -30,6 +30,7 @@ export default {
 
 <style scoped>
 .blogItem {
+  width: 100%;
   display: flex;
   flex-direction: column;
   padding: 20px 0;
@@ -63,6 +64,12 @@ export default {
   text-align: left;
   font-size: 15px;
   font-style: italic;
+
+  max-height: 150px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
 }
 
 .postMeta {

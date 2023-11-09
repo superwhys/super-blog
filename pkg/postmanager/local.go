@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"sort"
 	"sync"
 
 	"github.com/pkg/errors"
@@ -55,6 +56,13 @@ func (l *LocalGetter) GetPostList(ctx context.Context) (*models.BlogListItems, e
 	for _, value := range l.posts {
 		posts = append(posts, value)
 	}
+
+	sort.Slice(posts, func(i, j int) bool {
+		if posts[i].PostedTime == posts[j].PostedTime {
+			return posts[i].Title > posts[j].Title
+		}
+		return posts[i].PostedTime > posts[j].PostedTime
+	})
 	return &models.BlogListItems{
 		Items: posts,
 	}, nil

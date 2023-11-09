@@ -18,7 +18,7 @@
           </template>
         </blog-header>
       </el-header>
-      <el-main style="padding: 50px 0; min-height: calc(100vh - 420px - 5vh);">
+      <el-main style="overflow: visible; height: 100%; padding: 50px 0; min-height: calc(100vh - 420px - 5vh);">
         <div class="mainContainer">
           <div class="leftContainer">
             <slot name="blogLeftMainShow"></slot>
@@ -29,7 +29,11 @@
         </div>
       </el-main>
       <el-footer style="height: 5vh">
-        <slot name="blogFooterShow"></slot>
+        <slot name="blogFooterShow">
+          <div class="blogFooter">
+            Copyright © SuperYong Blog 2023
+          </div>
+        </slot>
       </el-footer>
     </el-container>
   </div>
@@ -90,6 +94,7 @@ export default {
 
 .mainContainer {
   width: 100%;
+  height: 100%;
   margin: 0 auto;
   display: flex;
   flex-direction: row;
@@ -138,7 +143,6 @@ export default {
   }
 }
 
-
 .header-menu {
   display: flex;
   justify-content: space-between;
@@ -175,5 +179,11 @@ export default {
 
 .header-menu-right a:hover {
   color: #d2cdcd;
+}
+
+.blogFooter {
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 0;
 }
 </style>

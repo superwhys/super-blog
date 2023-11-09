@@ -18,7 +18,7 @@ export class BlogMetaData {
 
 export class BlogItem {
     constructor({
-                    metaData=new BlogMetaData({}),
+                    metaData={},
                     fileName="",
                     title="",
                     subTitle="",
@@ -37,7 +37,7 @@ export class BlogItem {
 }
 
 export class BlogList {
-    constructor({ items }) {
+    constructor({ items={} }) {
         this.items = items.map(item => new BlogItem(item));
     }
 }

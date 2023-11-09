@@ -53,15 +53,18 @@ export default {
     this.tag = this.$route.params.tag === undefined ? "" : this.$route.params.tag
     getTagsInfo(this.tag).then(resp => {
       console.debug(resp)
-      this.tagInfoList = new TagGroup(resp.data)
+      if (resp.data) {
+        this.tagInfoList = new TagGroup(resp.data)
+      }
     })
 
     this.tag = this.tag === "" ? "Tags" : `Tag: ${this.tag}`
 
-
     getTagsList().then(resp => {
       console.debug(resp)
-      this.tags = new TagList(resp.data)
+      if (resp.data) {
+        this.tags = new TagList(resp.data)
+      }
     })
   },
   watch: {

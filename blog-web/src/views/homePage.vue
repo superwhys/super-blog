@@ -20,7 +20,6 @@
         <tags-module :tags="tags.tags"></tags-module>
         <about-me-module></about-me-module>
       </template>
-      <template v-slot:blogFooterShow>Footer</template>
     </base-page>
   </div>
 </template>
@@ -47,11 +46,15 @@ export default {
   created() {
     getBlogItemList().then(resp => {
       console.debug(resp)
-      this.postList = new BlogList(resp.data)
+      if (resp.data) {
+        this.postList = new BlogList(resp.data)
+      }
     });
     getTagsList().then(resp => {
       console.debug(resp)
-      this.tags = new TagList(resp.data)
+      if (resp.data) {
+        this.tags = new TagList(resp.data)
+      }
     })
   }
 }
@@ -59,7 +62,7 @@ export default {
 
 <style scoped>
 .homePage {
-  /*height: 100%;*/
+  height: 100%;
 }
 
 .blogItems {

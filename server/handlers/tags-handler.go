@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"sort"
 
 	"github.com/gin-gonic/gin"
 	"github.com/superwhys/goutils/lg"
@@ -35,6 +36,9 @@ func GetTagsHandler(ctx context.Context, localPostGetter *postmanager.LocalGette
 			})
 		}
 
+		sort.Slice(tagItems, func(i, j int) bool {
+			return tagItems[i].Tag < tagItems[j].Tag
+		})
 		c.JSON(http.StatusOK, models.PackResponseData(http.StatusOK, "get tags success", &models.TagsList{Tags: tagItems}))
 	}
 }
