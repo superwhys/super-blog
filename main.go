@@ -41,6 +41,8 @@ func main() {
 
 	staticPath := staticDir()
 	box := packr.New("blog", staticPath)
+	_, err := box.FindString("index.html")
+	lg.PanicError(err)
 
 	blogSrv := server.NewBlogServer(localGetter, githubGetter, githubSecretToken(), autoHookFileChange())
 	srv := service.NewSuperService(
