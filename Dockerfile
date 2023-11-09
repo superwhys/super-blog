@@ -1,15 +1,9 @@
-FROM bitnami/git as src
-ARG REPO=https://superwhys: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@github.com/superwhys/superBlog.git
-ARG BRANCH=main
-WORKDIR /
-RUN git clone --depth=1 -b $BRANCH $REPO app
-
 # builder
 FROM golang:alpine3.18 as builder
 
 WORKDIR /app
 
-COPY --from=src /app /app
+COPY ./ /app
 
 ARG SERVICE_NAME
 
