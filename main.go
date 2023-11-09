@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gobuffalo/packr/v2"
@@ -39,6 +40,7 @@ func main() {
 		githubGetter = postmanager.NewGithubGetter(client)
 	}
 	box := packr.Folder(staticDir())
+	fmt.Println(box.FindString("index.html"))
 
 	blogSrv := server.NewBlogServer(localGetter, githubGetter, githubSecretToken(), autoHookFileChange())
 	srv := service.NewSuperService(
