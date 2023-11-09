@@ -16,9 +16,10 @@ ARG SERVICE_NAME
 ENV GO111MODULE=auto
 ENV GOPROXY=https://goproxy.cn,direct
 RUN cd /app && \
-	go install github.com/gobuffalo/packr/v2/packr2 && \
+	go install github.com/gobuffalo/packr/v2/packr2@v2.8.3 && \
 	go mod tidy && \
 	packr2 && \
+	packr2 clean && \
 	go build -o ./server-go && \
 	chmod +x server-go 
 

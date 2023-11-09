@@ -19,7 +19,7 @@ var (
 	githubToken        = flags.String("githubToken", "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", "set the github api token")
 	githubSecretToken  = flags.String("githubSecretToken", "SjpvYt4nQVTZ", "set github webhook secret token")
 	basePostDir        = flags.String("basePostDir", "./blog-posts", "set the github api token")
-	statisDir          = flags.String("statisDir", "./blog-web/dist", "set the statis dir")
+	staticDir          = flags.String("staticDir", "./blog-web/dist", "set the static dir")
 	autoHookFileChange = flags.Bool("autoHookFileChange", false, "Whether to automatically detect changes of file in github repository")
 )
 
@@ -38,8 +38,7 @@ func main() {
 		client := github.NewClient(tc)
 		githubGetter = postmanager.NewGithubGetter(client)
 	}
-
-	box := packr.New("myBox", statisDir())
+	box := packr.Folder(staticDir())
 
 	blogSrv := server.NewBlogServer(localGetter, githubGetter, githubSecretToken(), autoHookFileChange())
 	srv := service.NewSuperService(
