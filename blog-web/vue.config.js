@@ -1,4 +1,35 @@
+const TerserPlugin = require("terser-webpack-plugin");
+const CompressionPlugin = require('compression-webpack-plugin');
+
+
 module.exports = {
+  configureWebpack: {
+    plugins: [
+      new CompressionPlugin({
+        algorithm: 'gzip',
+        test: /\.js$|\.html$|\.css/,
+        threshold: 1024,
+        deleteOriginalAssets: false
+      })
+    ],
+    externals: {
+      vue: 'Vue',
+      'vue-router': 'VueRouter',
+      axios: 'axios',
+    },
+    optimization: {
+      minimize: true,
+      minimizer: [
+        new TerserPlugin({
+          minify: TerserPlugin.uglifyJsMinify,
+          terserOptions: {
+            compress: true,
+          },
+        }),
+      ],
+    },
+  },
   publicPath: "/blog",
-  transpileDependencies: true
+  transpileDependencies: true,
+  productionSourceMap: false
 }
