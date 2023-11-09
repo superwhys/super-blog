@@ -3,7 +3,6 @@ services:
   super-blog:
     build: .
     container_name: super-blog 
-    network_mode: host
     ports:
       - 29913:29913
     logging:
