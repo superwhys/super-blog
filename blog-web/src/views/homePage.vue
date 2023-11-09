@@ -51,12 +51,27 @@ export default {
     }
   },
   created() {
-    getBlogItemList().then(resp => {
-      console.debug(resp)
-      if (resp.data) {
-        this.postList = new BlogList(resp.data)
-      }
-    });
+    let posts = this.$store.getters.getAllPosts;
+    let postList = []
+    if (Object.keys(posts).length !== 0) {
+      Object.entries(posts).forEach(([key, value]) => {
+        postList.push(value)
+      });
+      this.postList.items = postList
+      console.debug(`reload post list`)
+      console.debug(this.postList)
+    } else {
+      getBlogItemList().then(resp => {
+        console.debug(resp)
+        if (resp.data) {
+          this.postList = new BlogList(resp.data)
+          for (let post of this.postList.items) {
+            this.$store.commit('setPost', post);
+          }
+        }
+      });
+    }
+
     getTagsList().then(resp => {
       console.debug(resp)
       if (resp.data) {

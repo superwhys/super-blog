@@ -63,6 +63,18 @@ export default {
     this.day = this.$route.params.day
     this.name = this.$route.params.name
 
+    const postId = `/${this.year}/${this.month}/${this.day}/${this.name}`;
+
+    let post = this.$store.getters.getPost(postId);
+    console.debug(post)
+    if (post !== undefined) {
+      this.postItem = post
+      this.$nextTick(() => {
+        this.findTitles();
+      });
+      return
+    }
+
     getPost(this.year, this.month, this.day, this.name).then(resp => {
       console.debug(resp)
       if (resp.data) {

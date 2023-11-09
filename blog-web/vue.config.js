@@ -34,5 +34,5 @@ module.exports = {
     },
     publicPath: "/blog",
     transpileDependencies: true,
-    productionSourceMap: false
+    productionSourceMap: false,
 }
