@@ -12,10 +12,6 @@ const blogPage = () => import('@/views/blogPage.vue')
 const routes = [
   {
     path: '/',
-    redirect: '/home'
-  },
-  {
-    path: '/home',
     name: 'home',
     component: homePage
   },
@@ -25,12 +21,12 @@ const routes = [
     component: aboutPage
   },
   {
-    path: '/tags',
-    name: 'tags',
+    path: '/tag/:tag?',
+    name: 'tag',
     component: tagsPage
   },
   {
-    path: '/blog/:year/:month/:day/:name',
+    path: '/post/:year/:month/:day/:name',
     name: 'blog',
     component: blogPage
   }
@@ -38,7 +34,7 @@ const routes = [
 
 const router = new VueRouter({
   mode: 'history',
-  base: process.env.BASE_URL,
+  base: process.env.VUE_APP_BASE_URL,
   routes
 })
 

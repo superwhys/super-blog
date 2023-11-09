@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/gin-gonic/gin"
+	"github.com/gobuffalo/packr/v2"
 	"github.com/google/go-github/v53/github"
 	"github.com/superwhys/goutils/flags"
 	"github.com/superwhys/goutils/lg"
@@ -37,11 +38,13 @@ func main() {
 		githubGetter = postmanager.NewGithubGetter(client)
 	}
 
+	box := packr.New("myBox", "./blog-web/dist")
+
 	blogSrv := server.NewBlogServer(localGetter, githubGetter, githubSecretToken(), autoHookFileChange())
 	srv := service.NewSuperService(
 		service.WithHTTPCORS(),
 		service.WithPprof(),
-		service.WithHttpHandler("/", blogSrv.Handler()),
+		service.WithHttpHandler("/", blogSrv.Handler(box)),
 	)
 	lg.PanicError(srv.ListenAndServer(port()))
 }

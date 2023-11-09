@@ -1,12 +1,12 @@
 <template>
   <div class="tagsModule">
-    <base-main-right-module to-end-point="/tags">
+    <base-main-right-module to-end-point="/tag">
       <template v-slot:rightModuleTitle>
         FEATURED TAGS
       </template>
       <template v-slot:rightModuleMain>
         <div class="tagItems">
-          <tag-item v-for="item in tags" :text="item.text" :to-end-point="item.toEndPoint"></tag-item>
+          <tag-item v-for="item in tags" :key="item.key" :text="item.tag" :to-end-point="item.toEndPoint"></tag-item>
         </div>
       </template>
     </base-main-right-module>
@@ -23,7 +23,7 @@ export default {
   props: {
     tags: {
       type: Array,
-      default: [{text: "", toEndPoint: "#"}]
+      default: [{tag: "", toEndPoint: "#"}]
     }
   }
 }

@@ -2,7 +2,7 @@
   <div class="postPage">
     <base-page>
       <template v-slot:blogLeftMainShow>
-        {{year}}-{{month}}-{{day}}-{{name}}
+        {{ postItem.postContent }}
       </template>
     </base-page>
   </div>
@@ -10,6 +10,8 @@
 
 <script>
 import BasePage from "@/components/basePage.vue";
+import {getPost} from "@/network/postRequest";
+import {BlogItem} from "@/models/blogItem";
 
 export default {
   name: "blogPage",
@@ -19,7 +21,8 @@ export default {
       year: "",
       month:"",
       day:"",
-      blogName: ""
+      name: "",
+      postItem: new BlogItem({})
     }
   },
   created() {
@@ -28,6 +31,11 @@ export default {
     this.month = this.$route.params.month
     this.day = this.$route.params.day
     this.name = this.$route.params.name
+
+    getPost(this.year, this.month, this.day, this.name).then(resp => {
+      console.debug(resp)
+      this.postItem = new BlogItem(resp.data)
+    })
   }
 }
 </script>

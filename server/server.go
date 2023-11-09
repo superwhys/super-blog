@@ -2,8 +2,11 @@ package server
 
 import (
 	"context"
+	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/gobuffalo/packr/v2"
 	"github.com/superwhys/goutils/lg"
 	"github.com/superwhys/superBlog/pkg/postmanager"
 	"github.com/superwhys/superBlog/server/handlers"
@@ -57,12 +60,24 @@ func (bs *BlogServer) registerGithubHandlers(base *gin.RouterGroup, handlerFuncs
 	}
 }
 
-func (bs *BlogServer) Handler() *gin.Engine {
-	blogGroup := bs.engine.Group("/blog")
-	bs.registerPostHandlers(blogGroup)
-	bs.registerTagHandlers(blogGroup)
+func (bs *BlogServer) Handler(box *packr.Box) *gin.Engine {
+	bs.engine.StaticFS("/blog", box)
+	bs.engine.NoRoute(func(c *gin.Context) {
+		file, err := box.Open("index.html")
+		if err != nil {
+			c.Status(http.StatusNotFound)
+			return
+		}
+		defer file.Close()
+
+		http.ServeContent(c.Writer, c.Request, "index.html", time.Now(), file)
+	})
+
+	apiGroup := bs.engine.Group("/api")
+	bs.registerPostHandlers(apiGroup)
+	bs.registerTagHandlers(apiGroup)
 	if bs.autoHookFileChange {
-		bs.registerGithubHandlers(blogGroup, middlewares.GithubVerifyMiddleware(bs.ctx, bs.secretToken))
+		bs.registerGithubHandlers(apiGroup, middlewares.GithubVerifyMiddleware(bs.ctx, bs.secretToken))
 	}
 
 	return bs.engine

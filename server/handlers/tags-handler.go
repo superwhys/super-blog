@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -20,12 +21,20 @@ func GetTagsHandler(ctx context.Context, localPostGetter *postmanager.LocalGette
 			c.JSON(http.StatusInternalServerError, models.PackResponseData(http.StatusInternalServerError, "get tags failed", nil))
 			return
 		}
-
 		tagsSet := slices.NewStringSet()
 		for _, post := range postList.Items {
 			tagsSet.Add(post.MetaData.Tags...)
 		}
 		tags := tagsSet.Slice()
-		c.JSON(http.StatusOK, models.PackResponseData(http.StatusOK, "get tags success", tags))
+
+		var tagItems []*models.TagItem
+		for _, tag := range tags {
+			tagItems = append(tagItems, &models.TagItem{
+				Tag:        tag,
+				ToEndPoint: fmt.Sprintf("/tag/%v", tag),
+			})
+		}
+
+		c.JSON(http.StatusOK, models.PackResponseData(http.StatusOK, "get tags success", &models.TagsList{Tags: tagItems}))
 	}
 }

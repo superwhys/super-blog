@@ -42,6 +42,20 @@ type BlogListItems struct {
 	Items []*BlogItem `json:"items"`
 }
 
+type TagItem struct {
+	Info       *BlogItem `json:"info,omitempty"`
+	Tag        string    `json:"tag,omitempty"`
+	ToEndPoint string    `json:"toEndPoint,omitempty"`
+}
+
+type TagsGroupList struct {
+	Tags map[string][]*TagItem `json:"tags"`
+}
+
+type TagsList struct {
+	Tags []*TagItem `json:"tags"`
+}
+
 type GithubCommit struct {
 	Added    []string `json:"added" form:"added"`
 	Modified []string `json:"modified" form:"modified"`

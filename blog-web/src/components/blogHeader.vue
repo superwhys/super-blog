@@ -1,16 +1,6 @@
 <template>
   <div class="header-container">
     <div class="header-content">
-<!--      <div class="header-menu">-->
-<!--        <div class="header-menu-left">-->
-<!--          SuperYong-->
-<!--        </div>-->
-<!--        <div class="header-menu-right">-->
-<!--          <router-link to="/home">HOME</router-link>-->
-<!--          <router-link to="/about">ABOUT</router-link>-->
-<!--          <router-link to="/tags">TAGS</router-link>-->
-<!--        </div>-->
-<!--      </div>-->
       <div class="header-text">
         <slot name="headerImgInnerShow">
           <h1>Welcome to My Blog</h1>
@@ -23,19 +13,6 @@
 <script>
 export default {
   name: "blogHeader",
-  // props: {
-  //   headerImgUrl: {
-  //     type: String,
-  //     default: require("@/assets/post-bg-desk.jpg")
-  //   }
-  // },
-  // computed: {
-  //   backgroundImageStyle() {
-  //     return {
-  //       backgroundImage: `url(${this.headerImgUrl})`
-  //     }
-  //   }
-  // },
   data() {
     return {
     }

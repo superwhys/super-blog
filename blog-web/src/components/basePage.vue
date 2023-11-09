@@ -6,9 +6,9 @@
           SuperYong
         </div>
         <div class="header-menu-right">
-          <router-link to="/home" :style="{color: navTextColor}">HOME</router-link>
+          <router-link to="/" :style="{color: navTextColor}">HOME</router-link>
           <router-link to="/about" :style="{color: navTextColor}">ABOUT</router-link>
-          <router-link to="/tags" :style="{color: navTextColor}">TAGS</router-link>
+          <router-link to="/tag" :style="{color: navTextColor}">TAGS</router-link>
         </div>
       </div>
       <el-header :style="backgroundImageStyle">
@@ -95,9 +95,15 @@ export default {
   flex-direction: row;
 }
 
+@media (min-width: 430px) {
+  .mainContainer {
+    width: 420px;
+  }
+}
+
 @media (min-width: 768px) {
   .mainContainer {
-    width: 750px;
+    width: 740px;
   }
 }
 
@@ -116,6 +122,7 @@ export default {
 .leftContainer {
   flex: 8;
   display: flex;
+  flex-direction: column;
   margin-right: 20px;
 }
 

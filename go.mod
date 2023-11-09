@@ -4,6 +4,7 @@ go 1.20
 
 require (
 	github.com/gin-gonic/gin v1.9.1
+	github.com/gobuffalo/packr/v2 v2.8.3
 	github.com/google/go-github/v53 v53.2.0
 	github.com/pkg/errors v0.9.1
 	github.com/superwhys/goutils v0.0.0-20231108040144-ec7ec95c3b75
@@ -36,6 +37,8 @@ require (
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-playground/validator/v10 v10.14.0 // indirect
+	github.com/gobuffalo/logger v1.0.6 // indirect
+	github.com/gobuffalo/packd v1.0.1 // indirect
 	github.com/goccy/go-json v0.10.2 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
@@ -58,10 +61,14 @@ require (
 	github.com/hashicorp/serf v0.10.1 // indirect
 	github.com/jhump/protoreflect v1.15.3 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
+	github.com/karrick/godirwalk v1.16.1 // indirect
 	github.com/klauspost/compress v1.17.0 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.4 // indirect
 	github.com/leodido/go-urn v1.2.4 // indirect
 	github.com/magiconair/properties v1.8.7 // indirect
+	github.com/markbates/errx v1.1.0 // indirect
+	github.com/markbates/oncer v1.0.0 // indirect
+	github.com/markbates/safe v1.0.1 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
@@ -76,6 +83,7 @@ require (
 	github.com/sagikazarmark/crypt v0.15.0 // indirect
 	github.com/sagikazarmark/locafero v0.3.0 // indirect
 	github.com/sagikazarmark/slog-shim v0.1.0 // indirect
+	github.com/sirupsen/logrus v1.8.1 // indirect
 	github.com/soheilhy/cmux v0.1.5 // indirect
 	github.com/sourcegraph/conc v0.3.0 // indirect
 	github.com/spf13/afero v1.10.0 // indirect
@@ -98,6 +106,7 @@ require (
 	golang.org/x/exp v0.0.0-20230905200255-921286631fa9 // indirect
 	golang.org/x/net v0.17.0 // indirect
 	golang.org/x/sys v0.14.0 // indirect
+	golang.org/x/term v0.13.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	golang.org/x/time v0.3.0 // indirect
 	golang.org/x/xerrors v0.0.0-20220907171357-04be3eba64a2 // indirect

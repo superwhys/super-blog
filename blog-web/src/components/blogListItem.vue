@@ -1,6 +1,6 @@
 <template>
   <div class="blogItem">
-    <router-link :to="'/blog'+toEndPoint">
+    <router-link :to="'/post'+toEndPoint">
       <h2 class="postTitle">{{ title }}</h2>
       <h3 class="postSubtitle">{{ subTitle }}</h3>
       <div class="postContentPreview">{{ postContent }}</div>

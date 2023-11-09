@@ -11,20 +11,23 @@ import (
 	"github.com/superwhys/superBlog/pkg/postmanager"
 )
 
-func getTagsInfo(ctx context.Context, localPostGetter *postmanager.LocalGetter) (map[string][]*models.BlogItem, error) {
+func getTagsInfo(ctx context.Context, localPostGetter *postmanager.LocalGetter) (map[string][]*models.TagItem, error) {
 	postList, err := localPostGetter.GetPostList(ctx)
 	if err != nil {
 		return nil, errors.Wrap(err, "get post list")
 	}
 
-	tagsInfo := make(map[string][]*models.BlogItem)
+	tagsInfo := make(map[string][]*models.TagItem)
 	for _, post := range postList.Items {
 		for _, tag := range post.MetaData.Tags {
 			if _, exists := tagsInfo[tag]; !exists {
-				tagsInfo[tag] = make([]*models.BlogItem, 0)
+				tagsInfo[tag] = make([]*models.TagItem, 0)
 			}
 
-			tagsInfo[tag] = append(tagsInfo[tag], post)
+			tagsInfo[tag] = append(tagsInfo[tag], &models.TagItem{
+				Tag:  tag,
+				Info: post,
+			})
 		}
 	}
 	return tagsInfo, nil
@@ -40,7 +43,7 @@ func GetTagsInfoHandler(ctx context.Context, localPostGetter *postmanager.LocalG
 			return
 		}
 
-		c.JSON(http.StatusOK, models.PackResponseData(http.StatusOK, "get tags info success", tagsInfo))
+		c.JSON(http.StatusOK, models.PackResponseData(http.StatusOK, "get tags info success", &models.TagsGroupList{Tags: tagsInfo}))
 	}
 }
 
@@ -67,6 +70,13 @@ func GetSpecifyTagInfoHandler(ctx context.Context, localPostGetter *postmanager.
 			c.JSON(http.StatusBadRequest, models.PackResponseData(http.StatusBadRequest, "tag not exists", nil))
 			return
 		}
-		c.JSON(http.StatusOK, models.PackResponseData(http.StatusOK, "get tag info success", info))
+		c.JSON(
+			http.StatusOK,
+			models.PackResponseData(
+				http.StatusOK,
+				"get tag info success",
+				&models.TagsGroupList{Tags: map[string][]*models.TagItem{tag: info}},
+			),
+		)
 	}
 }
