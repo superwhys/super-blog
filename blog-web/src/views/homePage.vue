@@ -1,7 +1,14 @@
 <template>
   <div class="homePage">
     <base-page>
-      <template v-slot:blogHeaderImgInnerShow>this is template</template>
+      <template v-slot:blogHeaderImgInnerShow>
+        <div class="imgHeading">
+          My Blog
+        </div>
+        <span class="imgSubHeading">
+          Thinking will not overcome fear but action will.
+        </span>
+      </template>
       <template v-slot:blogLeftMainShow>
         <div class="blogItems">
           <blog-list-item
@@ -63,6 +70,15 @@ export default {
 <style scoped>
 .homePage {
   height: 100%;
+}
+
+.imgHeading {
+  font-size: 80px;
+  font-weight: bold;
+}
+
+.imgSubHeading {
+  font-size: 18px;
 }
 
 .blogItems {

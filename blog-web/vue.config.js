@@ -14,16 +14,9 @@ module.exports = {
             .end()
     },
     configureWebpack: {
-        plugins: [
-            new CompressionPlugin({
-                algorithm: 'gzip',
-                test: /\.js$|\.html$|\.css/,
-                threshold: 1024,
-                deleteOriginalAssets: false
-            })
-        ],
         externals: {
             vue: 'Vue',
+            vuex: "Vuex",
             'vue-router': 'VueRouter',
             axios: 'axios',
         },
