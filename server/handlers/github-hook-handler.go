@@ -17,6 +17,12 @@ import (
 
 func GithubHookHandler(ctx context.Context, localGetter *postmanager.LocalGetter, githubGetter *postmanager.GithubGetter) gin.HandlerFunc {
 	return func(c *gin.Context) {
+		reqEvent := c.GetHeader("X-GitHub-Event")
+		if reqEvent != "push" {
+			c.JSON(http.StatusForbidden, models.PackResponseData(http.StatusForbidden, "event not push", nil))
+			return
+		}
+
 		var event models.GithubPushEvent
 		if err := c.ShouldBind(&event); err != nil {
 			c.JSON(
