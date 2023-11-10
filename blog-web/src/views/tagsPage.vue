@@ -109,7 +109,7 @@ export default {
 
 .tagsGroupPost {
   height: 100px;
-  width: 700px;
+  width: 100%;
   display: flex;
   align-items: flex-start;
   justify-content: center;
