@@ -1,0 +1,3 @@
+[submodule "blog-posts"]
+	path = blog-posts
+	url = git@github.com:superwhys/blog-posts.git
