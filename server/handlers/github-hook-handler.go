@@ -4,14 +4,12 @@ import (
 	"context"
 	"net/http"
 	"path/filepath"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
 	"github.com/superwhys/goutils/lg"
 	"github.com/superwhys/superBlog/models"
 	"github.com/superwhys/superBlog/pkg/postmanager"
-	"github.com/superwhys/superBlog/pkg/share"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -48,8 +46,9 @@ func handleNewOrModifyFile(ctx context.Context, files []string, localGetter *pos
 	for _, file := range files {
 		file := file
 		lg.Debugc(ctx, "get file: %v", file)
-		if !strings.HasPrefix(file, share.BlogPostPrefix) {
-			lg.Debugc(ctx, "file: %v not blog-posts file", file)
+		fileSubMatch := postmanager.FindPostFileNameSubMatch(filepath.Base(file))
+		if len(fileSubMatch) != 3 {
+			lg.Warnc(ctx, "file: %v not a standard post file", filepath.Base(file))
 			continue
 		}
 

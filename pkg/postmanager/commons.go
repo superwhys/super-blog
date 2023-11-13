@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/base64"
 	"fmt"
+	"path/filepath"
 	"regexp"
 	"time"
 
@@ -17,8 +18,16 @@ var (
 	contentPattern  = regexp.MustCompile(`(?s)^---(.*)---\n`)
 )
 
+func FindPostFileNameSubMatch(fileName string) []string {
+	fileSubMatch := postFilePattern.FindStringSubmatch(filepath.Base(fileName))
+	if len(fileSubMatch) != 3 {
+		return nil
+	}
+	return fileSubMatch
+}
+
 func ParsePostContent(ctx context.Context, fileName, content string) (*models.BlogItem, error) {
-	fileSubMatch := postFilePattern.FindStringSubmatch(fileName)
+	fileSubMatch := FindPostFileNameSubMatch(fileName)
 	if len(fileSubMatch) != 3 {
 		return nil, fmt.Errorf("file: %v not a standard post file", fileName)
 	}

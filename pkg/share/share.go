@@ -1,8 +1,7 @@
 package share
 
 const (
-	Owner          = "superwhys"
-	Repo           = "superBlog"
-	Branch         = "main"
-	BlogPostPrefix = "blog-posts"
+	Owner  = "superwhys"
+	Repo   = "blog-posts"
+	Branch = "main"
 )
