@@ -12,8 +12,10 @@ export default {
       repo: 'blog-posts',
       owner: 'superwhys',
       admin: ['superwhys'],
-      id: location.pathname,
-      distractionFreeMode: false
+      id: decodeURIComponent(location.pathname),
+      title: decodeURIComponent(location.pathname),
+      distractionFreeMode: false,
+      proxy: "https://cors-server-ecru.vercel.app/github_access_token",
     })
 
     gitalk.render('gitalk-container')
