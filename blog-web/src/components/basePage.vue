@@ -31,7 +31,7 @@
       <el-footer class="blogFooter" style="height: 100%">
         <div>
           <slot name="blogFooterShow"></slot>
-          <span>Copyright © SuperYong Blog 2023</span>
+          <span style="color: grey;">Copyright © SuperYong Blog 2023</span>
         </div>
       </el-footer>
     </el-container>
@@ -185,7 +185,6 @@ export default {
   height: 200px;
   font-size: 14px;
   text-align: center;
-  /*margin:0 auto;*/
   padding-bottom: 30px;
 }
 </style>

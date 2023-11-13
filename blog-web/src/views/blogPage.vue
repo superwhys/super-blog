@@ -18,6 +18,7 @@
       <template v-slot:blogLeftMainShow>
         <v-md-preview :text="postItem.postContent" style="text-align: left;" ref="preview"></v-md-preview>
         <tags-module></tags-module>
+        <blog-comments></blog-comments>
       </template>
       <template v-slot:blogRightMainShow>
         <div class="anchor">
@@ -46,10 +47,11 @@ import {BlogItem} from "@/models/blogItem";
 import TagItem from "@/components/tagItem.vue";
 import AllTagsModule from "@/components/allTagsModule.vue";
 import TagsModule from "@/components/tagsModule.vue";
+import BlogComments from "@/components/blogComments.vue";
 
 export default {
   name: "blogPage",
-  components: {TagsModule, AllTagsModule, TagItem, BasePage},
+  components: {BlogComments, TagsModule, AllTagsModule, TagItem, BasePage},
   data() {
     return {
       year: "",
