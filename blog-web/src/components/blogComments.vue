@@ -12,12 +12,24 @@ export default {
       repo: 'blog-posts',
       owner: 'superwhys',
       admin: ['superwhys'],
-      id: decodeURIComponent(location.pathname),
-      title: decodeURIComponent(location.pathname),
+      id: this.parseString(decodeURIComponent(location.pathname)),
+      title: this.parseString(decodeURIComponent(location.pathname)),
       distractionFreeMode: false,
     })
 
     gitalk.render('gitalk-container')
+  },
+  methods: {
+    parseString(input) {
+      const parts = input.split('/');
+
+      const year = parts[3];
+      const month = parts[4];
+      const day = parts[5];
+      const title = parts[6];
+
+      return `${year}-${month}-${day}-${title}`;
+    }
   }
 }
 </script>
