@@ -125,7 +125,7 @@ export default {
 
 .leftContainer {
   flex: 8;
-  width: 100%;
+  width: 70%;
   display: flex;
   flex-direction: column;
   margin-right: 20px;
@@ -133,6 +133,7 @@ export default {
 
 .rightContainer {
   flex: 2;
+  width: 30%;
   display: flex;
   flex-direction: column;
 }
