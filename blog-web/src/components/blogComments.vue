@@ -15,7 +15,7 @@ export default {
       id: decodeURIComponent(location.pathname),
       title: decodeURIComponent(location.pathname),
       distractionFreeMode: false,
-      proxy: "https://cors-server-ecru.vercel.app/github_access_token",
+      proxy: "https://strong-caramel-969805.netlify.app/github_access_token",
     })
 
     gitalk.render('gitalk-container')
