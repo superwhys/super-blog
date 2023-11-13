@@ -26,7 +26,8 @@
           <div
               class="anchorItem"
               v-for="anchor in titles"
-              :style="{ padding: `10px 0 10px ${anchor.indent * 20}px`}"
+              :class="{ 'highlight': anchor.highlight }"
+              :style="{ padding: `5px 0 10px ${anchor.indent * 20}px`}"
               @click="handleAnchorClick(anchor)"
           >
             <a style="cursor: pointer">{{ anchor.title }}</a>
@@ -56,6 +57,12 @@ export default {
       mdToc: [],
       postItem: new BlogItem({})
     }
+  },
+  mounted() {
+    window.addEventListener('scroll', this.handleScroll);
+  },
+  beforeDestroy() {
+    window.removeEventListener('scroll', this.handleScroll);
   },
   created() {
     this.year = this.$route.params.year
@@ -87,6 +94,22 @@ export default {
     })
   },
   methods: {
+    handleScroll() {
+      const anchors = this.$refs.preview.$el.querySelectorAll('h1,h2,h3,h4,h5,h6');
+      for (let anchor of anchors) {
+        const bounding = anchor.getBoundingClientRect();
+        if (bounding.top >= 60 && bounding.top <= window.innerHeight) {
+          this.highlightTitle(anchor.innerText);
+          break;
+        }
+      }
+    },
+    highlightTitle(currentTitle) {
+      this.titles = this.titles.map(title => ({
+        ...title,
+        highlight: title.title === currentTitle
+      }));
+    },
     findTitles() {
       this.$nextTick(() => {
         const anchors = this.$refs.preview.$el.querySelectorAll('h1,h2,h3,h4,h5,h6');
@@ -131,7 +154,15 @@ export default {
 }
 
 .anchorItem {
+  width: 70%;
   font-size: 14px;
   text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; /* 防止文本换行 */
+}
+
+.highlight {
+  color: #f00;
 }
 </style>
