@@ -5,9 +5,7 @@
         FEATURED TAGS
       </template>
       <template v-slot:rightModuleMain>
-        <div class="tagItems">
-          <tag-item v-for="item in tags" :key="item.key" :text="item.tag" :to-end-point="item.toEndPoint"></tag-item>
-        </div>
+        <all-tags-module></all-tags-module>
       </template>
     </base-main-right-module>
   </div>
@@ -16,23 +14,13 @@
 <script>
 import TagItem from "@/components/tagItem.vue";
 import BaseMainRightModule from "@/components/baseMainRightModule.vue";
+import AllTagsModule from "@/components/allTagsModule.vue";
 
 export default {
   name: "tagsModule",
-  components: {BaseMainRightModule, TagItem},
-  props: {
-    tags: {
-      type: Array,
-      default: [{tag: "", toEndPoint: "#"}]
-    }
-  }
+  components: {AllTagsModule, BaseMainRightModule, TagItem},
 }
 </script>
 
 <style scoped>
-.tagItems {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-}
 </style>

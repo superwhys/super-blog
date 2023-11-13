@@ -6,10 +6,7 @@
       </template>
       <template v-slot:blogLeftMainShow>
         <!-- all tags list -->
-        <div class="allTags">
-          <tag-item text="all" to-end-point="/tag"></tag-item>
-          <tag-item v-for="item in tags.tags" :key="item.tag" :text="item.tag" :to-end-point="item.toEndPoint" style="margin-left: 5px"></tag-item>
-        </div>
+        <all-tags-module style="margin: 20px"></all-tags-module>
         <div class="tagsGroup" v-for="(groupTagPosts, groupTag) in tagInfoList.tagGroup" :key="groupTag">
           <div class="tagsGroupKey el-icon-paperclip">
             {{ groupTag }}
@@ -38,14 +35,14 @@ import BasePage from "@/components/basePage.vue";
 import {getTagsInfo, getTagsList} from "@/network/tagsRequest";
 import {TagGroup, TagList} from "@/models/tagItem";
 import TagItem from "@/components/tagItem.vue";
+import AllTagsModule from "@/components/allTagsModule.vue";
 
 export default {
   name: "tagsPage",
-  components: {TagItem, BasePage},
+  components: {AllTagsModule, TagItem, BasePage},
   data() {
     return {
       tag: "",
-      tags: new TagList({tags: []}),
       tagInfoList: new TagGroup({}),
     }
   },
@@ -59,13 +56,6 @@ export default {
     })
 
     this.tag = this.tag === "" ? "Tags" : `Tag: ${this.tag}`
-
-    getTagsList().then(resp => {
-      console.debug(resp)
-      if (resp.data) {
-        this.tags = new TagList(resp.data)
-      }
-    })
   },
   watch: {
     $route(to, from) {
@@ -81,12 +71,6 @@ export default {
 </script>
 
 <style scoped>
-.allTags {
-  margin: 20px;
-  height: 100%;
-  display: flex;
-  align-items: flex-start;
-}
 .tagsGroupKey {
   font-size: 24px;
   color: var(--hightlight);

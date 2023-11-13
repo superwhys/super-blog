@@ -17,6 +17,7 @@
       </template>
       <template v-slot:blogLeftMainShow>
         <v-md-preview :text="postItem.postContent" style="text-align: left;" ref="preview"></v-md-preview>
+        <tags-module></tags-module>
       </template>
       <template v-slot:blogRightMainShow>
         <div class="anchor">
@@ -43,10 +44,12 @@ import BasePage from "@/components/basePage.vue";
 import {getPost} from "@/network/postRequest";
 import {BlogItem} from "@/models/blogItem";
 import TagItem from "@/components/tagItem.vue";
+import AllTagsModule from "@/components/allTagsModule.vue";
+import TagsModule from "@/components/tagsModule.vue";
 
 export default {
   name: "blogPage",
-  components: {TagItem, BasePage},
+  components: {TagsModule, AllTagsModule, TagItem, BasePage},
   data() {
     return {
       year: "",
@@ -96,12 +99,22 @@ export default {
   methods: {
     handleScroll() {
       const anchors = this.$refs.preview.$el.querySelectorAll('h1,h2,h3,h4,h5,h6');
+      let closestAnchorAboveTop = null;
+      let smallestNegativeDistance = -Infinity;
+
       for (let anchor of anchors) {
         const bounding = anchor.getBoundingClientRect();
-        if (bounding.top >= 60 && bounding.top <= window.innerHeight) {
-          this.highlightTitle(anchor.innerText);
-          break;
+        const distance = bounding.top;
+
+        // 查找最接近顶部但仍然在视口上方的标题
+        if (distance < 80 && distance > smallestNegativeDistance) {
+          smallestNegativeDistance = distance;
+          closestAnchorAboveTop = anchor;
         }
+      }
+
+      if (closestAnchorAboveTop) {
+        this.highlightTitle(closestAnchorAboveTop.innerText);
       }
     },
     highlightTitle(currentTitle) {
@@ -126,6 +139,8 @@ export default {
           lineIndex: el.getAttribute('data-v-md-line'),
           indent: hTags.indexOf(el.tagName),
         }));
+        console.debug(this.titles)
+        this.titles[0].highlight = true
       })
     },
     handleAnchorClick(anchor) {
@@ -159,7 +174,7 @@ export default {
   text-align: left;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap; /* 防止文本换行 */
+  white-space: nowrap;
 }
 
 .highlight {

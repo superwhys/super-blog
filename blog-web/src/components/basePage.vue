@@ -28,12 +28,11 @@
           </div>
         </div>
       </el-main>
-      <el-footer style="height: 5vh">
-        <slot name="blogFooterShow">
-          <div class="blogFooter">
-            Copyright © SuperYong Blog 2023
-          </div>
-        </slot>
+      <el-footer class="blogFooter" style="height: 100%">
+        <div>
+          <slot name="blogFooterShow"></slot>
+          <span>Copyright © SuperYong Blog 2023</span>
+        </div>
       </el-footer>
     </el-container>
   </div>
@@ -183,8 +182,10 @@ export default {
 }
 
 .blogFooter {
+  height: 200px;
   font-size: 14px;
   text-align: center;
-  margin-bottom: 0;
+  /*margin:0 auto;*/
+  padding-bottom: 30px;
 }
 </style>

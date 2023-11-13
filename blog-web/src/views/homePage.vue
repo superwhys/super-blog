@@ -24,7 +24,7 @@
         </div>
       </template>
       <template v-slot:blogRightMainShow>
-        <tags-module :tags="tags.tags"></tags-module>
+        <tags-module></tags-module>
         <about-me-module></about-me-module>
       </template>
     </base-page>
@@ -46,7 +46,6 @@ export default {
   components: {AboutMeModule, TagsModule, BlogListItem, BasePage},
   data() {
     return {
-      tags: new TagList({tags: []}),
       postList: new BlogList({items: []})
     }
   },
@@ -71,13 +70,6 @@ export default {
         }
       });
     }
-
-    getTagsList().then(resp => {
-      console.debug(resp)
-      if (resp.data) {
-        this.tags = new TagList(resp.data)
-      }
-    })
   }
 }
 </script>
