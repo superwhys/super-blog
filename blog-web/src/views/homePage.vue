@@ -2,10 +2,10 @@
   <div class="homePage">
     <base-page>
       <template v-slot:blogHeaderImgInnerShow>
-        <div class="imgHeading">
+        <div class="imgHeading flyInFromTop">
           My Blog
         </div>
-        <span class="imgSubHeading">
+        <span class="imgSubHeading flyInFromTop">
           Thinking will not overcome fear but action will.
         </span>
       </template>
@@ -13,6 +13,7 @@
         <div class="blogItems">
           <blog-list-item
               v-for="item in postList.items"
+              class="flyInFromBottom"
               :key="item.title"
               :title="item.title"
               :sub-title="item.subTitle"
@@ -24,8 +25,8 @@
         </div>
       </template>
       <template v-slot:blogRightMainShow>
-        <tags-module></tags-module>
-        <about-me-module></about-me-module>
+        <tags-module class="flyInFromBottom"></tags-module>
+        <about-me-module class="flyInFromBottom"></about-me-module>
       </template>
     </base-page>
   </div>

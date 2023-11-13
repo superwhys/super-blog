@@ -33,31 +33,6 @@ export default {
   justify-content: flex-start;
 }
 
-.header-menu {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  height: 50px;
-
-  position: sticky;
-  z-index: 1000;
-  top: 0;
-}
-
-.header-menu-left {
-  color: white;
-  margin: 10px 0 0 20px;
-  font-size: 30px;
-  font-weight: bold;
-  user-select: none;
-  display: flex;
-}
-
-.header-menu-right {
-  display: flex;
-  flex-direction: row;
-}
-
 .header-menu-right a {
   text-decoration: none;
   color: white;

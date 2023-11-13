@@ -1,0 +1,44 @@
+@keyframes flyInFromBottom {
+    from {
+        opacity: 0;
+        transform: translateY(70px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes flyInFromTop {
+    from {
+        opacity: 0;
+        transform: translateY(-70px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes flyInFromLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-70px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.flyInFromBottom {
+    animation: flyInFromBottom 0.5s ease-out;
+}
+
+.flyInFromTop {
+    animation: flyInFromTop 0.5s ease-out;
+}
+
+.flyInFromLeft {
+    animation: flyInFromLeft 0.5s ease-out;
+}

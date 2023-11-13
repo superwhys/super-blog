@@ -2,10 +2,10 @@
   <div class="postPage">
     <base-page>
       <template v-slot:blogHeaderImgInnerShow>
-        <div class="imgTitle">
+        <div class="imgTitle flyInFromTop">
           {{ postItem.title }}
         </div>
-        <div class="imgTag">
+        <div class="imgTag flyInFromTop">
           <tag-item
               v-for="item in postItem.metaData.tags"
               :key="item"
@@ -16,12 +16,12 @@
         </div>
       </template>
       <template v-slot:blogLeftMainShow>
-        <v-md-preview :text="postItem.postContent" style="text-align: left;" ref="preview"></v-md-preview>
+        <v-md-preview :text="postItem.postContent" style="text-align: left;" ref="preview" class="flyInFromBottom"></v-md-preview>
         <tags-module></tags-module>
         <blog-comments></blog-comments>
       </template>
       <template v-slot:blogRightMainShow>
-        <div class="anchor">
+        <div class="anchor flyInFromBottom">
           <div style="text-align: left; font-size: 20px; font-weight: bold; padding-bottom: 15px">
             - CATALOG
           </div>

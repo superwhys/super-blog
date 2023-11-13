@@ -2,13 +2,13 @@
   <div class="basePage">
     <el-container style="min-height: 100vh;">
       <div class="header-menu" :style="{backgroundColor: backgroundColor}">
-        <div class="header-menu-left" :style="{color: navTextColor}">
+        <div class="header-menu-left color-trans" :style="{color: navTextColor}">
           SuperYong
         </div>
         <div class="header-menu-right">
-          <router-link to="/" :style="{color: navTextColor}">HOME</router-link>
-          <router-link to="/about" :style="{color: navTextColor}">ABOUT</router-link>
-          <router-link to="/tag" :style="{color: navTextColor}">TAGS</router-link>
+          <router-link to="/" :style="{color: navTextColor}" class="color-trans">HOME</router-link>
+          <router-link to="/about" :style="{color: navTextColor}" class="color-trans">ABOUT</router-link>
+          <router-link to="/tag" :style="{color: navTextColor}" class="color-trans">TAGS</router-link>
         </div>
       </div>
       <el-header :style="backgroundImageStyle">
@@ -153,6 +153,7 @@ export default {
   top: 0;
   left: 0;
   right: 0;
+  transition: background-color 0.5s;
 }
 
 .header-menu-left {
@@ -162,6 +163,10 @@ export default {
   font-weight: bold;
   user-select: none;
   display: flex;
+}
+
+.color-trans {
+  transition: color 0.5s;
 }
 
 .header-menu-right {

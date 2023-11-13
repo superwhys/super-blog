@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import '@/assets/animations.css';
 
 Vue.config.productionTip = false
 import VMdPreview from '@kangc/v-md-editor/lib/preview';

@@ -2,12 +2,14 @@
   <div class="tagsPage">
     <base-page>
       <template v-slot:blogHeaderImgInnerShow>
-        {{ tag }}
+        <div class="flyInFromTop">
+          {{ tag }}
+        </div>
       </template>
       <template v-slot:blogLeftMainShow>
         <!-- all tags list -->
-        <all-tags-module style="margin: 20px"></all-tags-module>
-        <div class="tagsGroup" v-for="(groupTagPosts, groupTag) in tagInfoList.tagGroup" :key="groupTag">
+        <all-tags-module class="flyInFromLeft" style="margin: 20px"></all-tags-module>
+        <div class="tagsGroup flyInFromBottom" v-for="(groupTagPosts, groupTag) in tagInfoList.tagGroup" :key="groupTag">
           <div class="tagsGroupKey el-icon-paperclip">
             {{ groupTag }}
           </div>
