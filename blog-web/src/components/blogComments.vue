@@ -1,5 +1,5 @@
 <template>
-  <div id="gitalk-container"></div>
+  <div id="gitalk-container" style="text-align: start"></div>
 </template>
 
 <script>
