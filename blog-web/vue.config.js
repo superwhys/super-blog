@@ -25,6 +25,8 @@ module.exports = {
                     minify: TerserPlugin.uglifyJsMinify,
                     terserOptions: {
                         compress: true,
+                        drop_debugger: true,
+                        drop_console: true
                     },
                 }),
             ],
