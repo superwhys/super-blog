@@ -98,27 +98,53 @@ export default {
   flex-direction: row;
 }
 
-@media (min-width: 430px) {
+@media (max-width: 576px) {
   .mainContainer {
-    width: 420px;
+    width: 95%;
+  }
+
+  .leftContainer {
+    margin: 0 20px;
   }
 }
 
-@media (min-width: 768px) {
+@media (min-width: 576px) and (max-width: 768px) {
   .mainContainer {
-    width: 740px;
+    width: 90%;
+  }
+
+  .leftContainer {
+    margin: 0 20px;
   }
 }
 
-@media (min-width: 992px) {
+@media (min-width: 768px) and (max-width: 992px) {
   .mainContainer {
-    width: 970px;
+    width: 90%;
+  }
+
+  .leftContainer {
+    margin-right: 40px;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1200px) {
+  .mainContainer {
+    width: 80%;
+  }
+
+  .leftContainer {
+    margin-right: 40px;
   }
 }
 
 @media (min-width: 1200px) {
   .mainContainer {
-    width: 1170px;
+    width: 75%;
+  }
+
+  .leftContainer {
+    margin-right: 40px;
   }
 }
 
@@ -127,7 +153,6 @@ export default {
   width: 70%;
   display: flex;
   flex-direction: column;
-  margin-right: 40px;
 }
 
 .rightContainer {
@@ -137,7 +162,7 @@ export default {
   flex-direction: column;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 768px) {
   .rightContainer {
     display: none;
   }
