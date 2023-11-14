@@ -18,10 +18,24 @@ export default {
     }
   },
   created() {
+    let allTags = this.$store.getters.getTags;
+    let tags = []
+    for (let key in allTags) {
+      tags.push(allTags[key])
+    }
+    if (tags.length !== 0) {
+      this.tags.tags = tags
+      console.log(this.tags)
+      return
+    }
+
     getTagsList().then(resp => {
       console.debug(resp)
       if (resp.data) {
         this.tags = new TagList(resp.data)
+        for (let tag of this.tags.tags) {
+          this.$store.commit('setTag', tag)
+        }
       }
     })
   },

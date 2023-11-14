@@ -49,11 +49,20 @@ export default {
     }
   },
   created() {
-    this.tag = this.$route.params.tag === undefined ? "" : this.$route.params.tag
+    let tag = this.$route.params.tag === undefined ? "" : this.$route.params.tag
+    this.tag = tag
+
+    let tagGrp = this.$store.getters.getTagGroup(tag)
+    if (tagGrp !== undefined) {
+      this.tagInfoList = tagGrp
+      return
+    }
+
     getTagsInfo(this.tag).then(resp => {
       console.debug(resp)
       if (resp.data) {
         this.tagInfoList = new TagGroup(resp.data)
+        this.$store.commit('setTagGroup', {tag: tag, tagGrp: this.tagInfoList})
       }
     })
 
@@ -61,10 +70,24 @@ export default {
   },
   watch: {
     $route(to, from) {
-      this.tag = this.$route.params.tag === undefined ? "" : this.$route.params.tag
+      if (to.name !== "tag") {
+        return
+      }
+      let tag = this.$route.params.tag === undefined ? "" : this.$route.params.tag
+      this.tag = tag
+
+      let tagGrp = this.$store.getters.getTagGroup(tag)
+      if (tagGrp !== undefined) {
+        this.tagInfoList = tagGrp
+        return
+      }
+
       getTagsInfo(this.tag).then(resp => {
         console.debug(resp)
-        this.tagInfoList = new TagGroup(resp.data)
+        if (resp.data) {
+          this.tagInfoList = new TagGroup(resp.data)
+          this.$store.commit('setTagGroup', {tag: tag, tagGrp: this.tagInfoList})
+        }
       })
       this.tag = this.tag === "" ? "Tags" : `Tag: ${this.tag}`
     }
