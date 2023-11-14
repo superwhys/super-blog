@@ -19,7 +19,7 @@ Vue.use(VMdPreview);
 
 import {
     Container, Header, Main, Footer,
-    Menu, MenuItem
+    Menu, MenuItem, Tooltip
 } from "element-ui";
 
 Vue.use(Container)
@@ -28,6 +28,7 @@ Vue.use(Main)
 Vue.use(Footer)
 Vue.use(Menu)
 Vue.use(MenuItem)
+Vue.use(Tooltip)
 
 new Vue({
     router,
