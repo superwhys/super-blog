@@ -32,7 +32,7 @@ module.exports = {
             ],
         },
     },
-    publicPath: "/",
+    publicPath: "./",
     transpileDependencies: true,
     productionSourceMap: false,
 }
