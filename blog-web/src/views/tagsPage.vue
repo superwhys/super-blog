@@ -1,6 +1,6 @@
 <template>
   <div class="tagsPage">
-    <base-page>
+    <base-page :show-right="false">
       <template v-slot:blogHeaderImgInnerShow>
         <div class="flyInFromTop">
           {{ tag }}
@@ -79,6 +79,7 @@ export default {
 }
 
 .tagsGroup {
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -91,6 +92,7 @@ export default {
   flex-direction: column;
   padding: 0;
   margin: 10px 0;
+  width: 100%;
 }
 
 .tagsGroupPost {

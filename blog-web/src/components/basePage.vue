@@ -23,7 +23,7 @@
           <div class="leftContainer">
             <slot name="blogLeftMainShow"></slot>
           </div>
-          <div class="rightContainer">
+          <div class="rightContainer" :style="{display: showRight===true?'block':'none'}">
             <slot name="blogRightMainShow"></slot>
           </div>
         </div>
@@ -45,6 +45,10 @@ export default {
   name: "basePage",
   components: {BlogHeader},
   props: {
+    showRight: {
+      type: Boolean,
+      default: true,
+    },
     headerImgUrl: {
       type: String,
       default: require("@/assets/post-bg-desk.jpg")
