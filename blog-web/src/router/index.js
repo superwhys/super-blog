@@ -40,8 +40,8 @@ const routes = [
 
 const router = new VueRouter({
     mode: 'history',
-    // base: `/${basePath}`,
-    base: process.env.VUE_APP_BASE_URL,
+    base: `/${basePath}`,
+    // base: process.env.VUE_APP_BASE_URL,
     routes
 })
 
