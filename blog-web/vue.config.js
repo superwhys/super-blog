@@ -1,6 +1,4 @@
 const TerserPlugin = require("terser-webpack-plugin");
-const CompressionPlugin = require('compression-webpack-plugin');
-
 
 module.exports = {
     chainWebpack: config => {
