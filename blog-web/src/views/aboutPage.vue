@@ -81,6 +81,7 @@ export default {
   margin-top: 20px;
   flex-direction: column;
   align-items: flex-start;
+  text-align: start;
 }
 
 .greeting {
