@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
 	"github.com/superwhys/goutils/lg"
+	"github.com/superwhys/goutils/slices"
 	"github.com/superwhys/superBlog/models"
 	"github.com/superwhys/superBlog/pkg/postmanager"
 	"golang.org/x/sync/errgroup"
@@ -30,10 +31,51 @@ func GithubHookHandler(ctx context.Context, localGetter *postmanager.LocalGetter
 			return
 		}
 
-		handleNewOrModifyFile(lg.With(ctx, "[AddedFile]"), event.HeadCommit.Added, localGetter, githubGetter)
-		handleNewOrModifyFile(lg.With(ctx, "[ModifiedFile]"), event.HeadCommit.Modified, localGetter, githubGetter)
-		handleDelededFile(lg.With(ctx, "[DeleteFile]"), event.HeadCommit.Removed, localGetter)
+		if event.Ref != "refs/heads/main" {
+			c.JSON(
+				http.StatusBadRequest,
+				models.PackResponseData(http.StatusBadRequest, "ref is not main", nil),
+			)
+			return
+		}
+
+		addedFile, modifiedFile, removedFile, _ := parseCommit(event.Commits)
+
+		handleNewOrModifyFile(lg.With(ctx, "[AddedFile]"), addedFile.Slice(), localGetter, githubGetter)
+		handleNewOrModifyFile(lg.With(ctx, "[ModifiedFile]"), modifiedFile.Slice(), localGetter, githubGetter)
+		handleDelededFile(lg.With(ctx, "[DeleteFile]"), removedFile.Slice(), localGetter)
 	}
+}
+
+func parseCommit(commits []*models.GithubCommit) (added slices.StringSet, modified slices.StringSet, removed slices.StringSet, err error) {
+	added = slices.NewStringSet()
+	modified = slices.NewStringSet()
+	removed = slices.NewStringSet()
+
+	processFunc := func(files []string, grp slices.StringSet) {
+		for _, file := range files {
+			grp.Add(file)
+		}
+	}
+
+	for _, commit := range commits {
+		if len(commit.Added) != 0 {
+			processFunc(commit.Added, added)
+		}
+		if len(commit.Modified) != 0 {
+			processFunc(commit.Modified, modified)
+		}
+		if len(commit.Removed) != 0 {
+			processFunc(commit.Removed, removed)
+		}
+	}
+
+	for _, removeFile := range removed.Slice() {
+		added.Delete(removeFile)
+		modified.Delete(removeFile)
+	}
+
+	return
 }
 
 func handleNewOrModifyFile(ctx context.Context, files []string, localGetter *postmanager.LocalGetter, githubGetter *postmanager.GithubGetter) error {

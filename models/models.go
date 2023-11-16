@@ -63,5 +63,7 @@ type GithubCommit struct {
 }
 
 type GithubPushEvent struct {
-	HeadCommit *GithubCommit `json:"head_commit" form:"head_commit"`
+	Ref        string          `json:"ref" form:"ref"`
+	Commits    []*GithubCommit `json:"commits" form:"commits"`
+	HeadCommit *GithubCommit   `json:"head_commit" form:"head_commit"`
 }
