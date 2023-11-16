@@ -1,8 +1,8 @@
 <template>
   <div class="blogItem">
     <router-link :to="'/post'+toEndPoint">
-      <h2 class="postTitle">{{ title }}</h2>
-      <h3 class="postSubtitle">{{ subTitle }}</h3>
+      <h2 class="postTitle oneLine">{{ title }}</h2>
+      <h3 class="postSubtitle oneLine">{{ subTitle }}</h3>
       <div class="postContentPreview">{{ postContent }}</div>
     </router-link>
     <p class="postMeta">{{ metaData }}</p>
@@ -40,7 +40,6 @@ export default {
 .blogItem a {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   text-decoration: none;
   color: gray;
 }
@@ -48,6 +47,14 @@ export default {
 .postTitle {
   margin: 0;
   color: black;
+  text-align: left;
+}
+
+.oneLine {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
 }
 
 .postTitle:hover, .postTitle:hover ~ .postSubtitle, .postSubtitle:hover, .postSubtitle:hover ~ .postTitle {
@@ -58,6 +65,7 @@ export default {
   margin: 10px 0;
   font-size: 16px;
   font-weight: normal;
+  text-align: left;
 }
 
 .postContentPreview {

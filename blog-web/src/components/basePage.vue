@@ -168,7 +168,7 @@ export default {
 
 @media (max-width: 768px) {
   .rightContainer {
-    display: none;
+    display: none !important;
   }
 }
 
