@@ -51,7 +51,7 @@ func ParsePostContent(ctx context.Context, fileName, content string) (*models.Bl
 	item := &models.BlogItem{
 		MetaData:    meta,
 		FileName:    fileName,
-		Title:       fileSubMatch[2],
+		Title:       meta.Title,
 		SubTitle:    meta.SubTitle,
 		RawContent:  encodeContent,
 		PostContent: content,
