@@ -61,7 +61,7 @@ func (l *LocalGetter) GetPostList(ctx context.Context) (*models.BlogListItems, e
 		if posts[i].PostedTime == posts[j].PostedTime {
 			return posts[i].Title > posts[j].Title
 		}
-		return posts[i].PostedTime > posts[j].PostedTime
+		return posts[i].ToEndPoint > posts[j].ToEndPoint
 	})
 	return &models.BlogListItems{
 		Items: posts,
