@@ -10,6 +10,12 @@
           <router-link to="/about" :style="{color: navTextColor}" class="color-trans">ABOUT</router-link>
           <router-link to="/tag" :style="{color: navTextColor}" class="color-trans">TAGS</router-link>
         </div>
+        <div class="menu-icon" @click="toggleMobileNav" v-show="isMobile">
+          AAA
+        </div>
+        <div class="mobile-nav" v-if="showMobileNav">
+          <a href="">BBB</a>
+        </div>
       </div>
       <el-header :style="backgroundImageStyle">
         <blog-header style="width: 100%; height: 100%">
@@ -57,7 +63,9 @@ export default {
   data() {
     return {
       navTextColor: "white",
-      backgroundColor: "transparent"
+      backgroundColor: "transparent",
+      isMobile: window.innerWidth < 760,
+      showMobileNav: false,
     }
   },
   computed: {
@@ -70,12 +78,27 @@ export default {
     }
   },
   mounted() {
+    window.addEventListener('resize', this.handleResize);
+    this.handleResize();
     window.addEventListener('scroll', this.changeColor);
+    if (window.innerWidth < 768) {
+      document.querySelectorAll('.header-menu-right').forEach(function(el) {
+        el.classList.add('no-animation');
+      });
+    }
   },
   beforeDestroy() {
+    window.removeEventListener('resize', this.handleResize);
     window.removeEventListener('scroll', this.changeColor);
   },
   methods: {
+    handleResize() {
+      this.isMobile = window.innerWidth < 760;
+      console.log(this.isMobile)
+    },
+    toggleMobileNav() {
+      this.showMobileNav = !this.showMobileNav;
+    },
     changeColor() {
       if (window.scrollY > 400) {
         this.backgroundColor = 'rgb(255,255,255, 0.8)';
@@ -203,6 +226,37 @@ export default {
   flex-direction: row;
 }
 
+@keyframes slideRightToHide {
+  0% {
+    clip-path: inset(0 0 0 0);
+  }
+  100% {
+    clip-path: inset(0 0 0 100%);
+  }
+}
+
+@keyframes slideLeftToAppear {
+  from { clip-path: inset(0 0 0 100%); }
+  to { clip-path: inset(0 0 0 0); }
+}
+
+@media (max-width: 768px) {
+  .header-menu-right {
+    animation: slideRightToHide 0.8s ease forwards;
+  }
+
+  .no-animation {
+    animation: none;
+    clip-path: inset(0 100% 0 0);
+  }
+}
+
+@media (min-width: 768px) {
+  .header-menu-right {
+    animation: slideLeftToAppear 0.8s ease forwards;
+  }
+}
+
 .header-menu-right a {
   text-decoration: none;
   color: white;
@@ -220,5 +274,23 @@ export default {
   font-size: 14px;
   text-align: center;
   padding-bottom: 30px;
+}
+
+.menu-icon {
+  display: none;
+}
+.mobile-nav {
+  display: none;
+  /* 添加样式使导航栏从右侧弹出 */
+}
+@media (max-width: 760px) {
+  .menu-icon {
+    display: block;
+    /* 添加样式使图标显示 */
+  }
+  .mobile-nav {
+    display: block;
+    /* 添加样式使移动导航显示 */
+  }
 }
 </style>
