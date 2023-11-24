@@ -39,17 +39,15 @@ func GithubHookHandler(ctx context.Context, localGetter *postmanager.LocalGetter
 			return
 		}
 
-		addedFile, modifiedFile, removedFile, _ := parseCommit(event.Commits)
+		addOrUpdate, removedFile, _ := parseCommit(event.Commits)
 
-		handleNewOrModifyFile(lg.With(ctx, "[AddedFile]"), addedFile.Slice(), localGetter, githubGetter)
-		handleNewOrModifyFile(lg.With(ctx, "[ModifiedFile]"), modifiedFile.Slice(), localGetter, githubGetter)
+		handleAddOrUpdateFile(lg.With(ctx, "[AddOrUpdate]"), addOrUpdate.Slice(), localGetter, githubGetter)
 		handleDelededFile(lg.With(ctx, "[DeleteFile]"), removedFile.Slice(), localGetter)
 	}
 }
 
-func parseCommit(commits []*models.GithubCommit) (added slices.StringSet, modified slices.StringSet, removed slices.StringSet, err error) {
-	added = slices.NewStringSet()
-	modified = slices.NewStringSet()
+func parseCommit(commits []*models.GithubCommit) (addOrUdpate slices.StringSet, removed slices.StringSet, err error) {
+	addOrUdpate = slices.NewStringSet()
 	removed = slices.NewStringSet()
 
 	processFunc := func(files []string, grp slices.StringSet) {
@@ -59,26 +57,25 @@ func parseCommit(commits []*models.GithubCommit) (added slices.StringSet, modifi
 	}
 
 	for _, commit := range commits {
-		if len(commit.Added) != 0 {
-			processFunc(commit.Added, added)
-		}
-		if len(commit.Modified) != 0 {
-			processFunc(commit.Modified, modified)
-		}
 		if len(commit.Removed) != 0 {
 			processFunc(commit.Removed, removed)
+		}
+		if len(commit.Added) != 0 {
+			processFunc(commit.Added, addOrUdpate)
+		}
+		if len(commit.Modified) != 0 {
+			processFunc(commit.Modified, addOrUdpate)
 		}
 	}
 
 	for _, removeFile := range removed.Slice() {
-		added.Delete(removeFile)
-		modified.Delete(removeFile)
+		addOrUdpate.Delete(removeFile)
 	}
 
 	return
 }
 
-func handleNewOrModifyFile(ctx context.Context, files []string, localGetter *postmanager.LocalGetter, githubGetter *postmanager.GithubGetter) error {
+func handleAddOrUpdateFile(ctx context.Context, files []string, localGetter *postmanager.LocalGetter, githubGetter *postmanager.GithubGetter) error {
 	if len(files) == 0 {
 		return nil
 	}
