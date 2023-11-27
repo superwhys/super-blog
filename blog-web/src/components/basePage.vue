@@ -1,17 +1,8 @@
 <template>
   <div class="basePage">
     <el-container style="min-height: 100vh;">
-      <div class="header-menu" :style="{backgroundColor: backgroundColor}">
-        <div class="header-menu-left color-trans" :style="{color: navTextColor}">
-          SuperYong
-        </div>
-        <div class="header-menu-right">
-          <router-link to="/" :style="{color: navTextColor}" class="color-trans">HOME</router-link>
-          <router-link to="/about" :style="{color: navTextColor}" class="color-trans">ABOUT</router-link>
-          <router-link to="/tag" :style="{color: navTextColor}" class="color-trans">TAGS</router-link>
-        </div>
-      </div>
       <el-header :style="backgroundImageStyle">
+        <nav-bar-module></nav-bar-module>
         <blog-header style="width: 100%; height: 100%">
           <template v-slot:headerImgInnerShow>
             <slot name="blogHeaderImgInnerShow"></slot>
@@ -40,10 +31,11 @@
 
 <script>
 import BlogHeader from "@/components/blogHeader.vue";
+import NavBarModule from "@/components/navBarModule.vue";
 
 export default {
   name: "basePage",
-  components: {BlogHeader},
+  components: {NavBarModule, BlogHeader},
   props: {
     showRight: {
       type: Boolean,
@@ -55,10 +47,7 @@ export default {
     }
   },
   data() {
-    return {
-      navTextColor: "white",
-      backgroundColor: "transparent"
-    }
+    return {}
   },
   computed: {
     backgroundImageStyle() {
@@ -68,23 +57,6 @@ export default {
         backgroundImage: `url(${this.headerImgUrl})`
       }
     }
-  },
-  mounted() {
-    window.addEventListener('scroll', this.changeColor);
-  },
-  beforeDestroy() {
-    window.removeEventListener('scroll', this.changeColor);
-  },
-  methods: {
-    changeColor() {
-      if (window.scrollY > 400) {
-        this.backgroundColor = 'rgb(255,255,255, 0.8)';
-        this.navTextColor = 'black'
-      } else {
-        this.backgroundColor = 'transparent';
-        this.navTextColor = 'white'
-      }
-    },
   },
 }
 </script>
@@ -172,48 +144,6 @@ export default {
   }
 }
 
-.header-menu {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  height: 60px;
-  position: fixed;
-  z-index: 1000;
-  top: 0;
-  left: 0;
-  right: 0;
-  transition: background-color 0.5s;
-}
-
-.header-menu-left {
-  color: white;
-  margin: 10px 0 0 20px;
-  font-size: 30px;
-  font-weight: bold;
-  user-select: none;
-  display: flex;
-}
-
-.color-trans {
-  transition: color 0.5s;
-}
-
-.header-menu-right {
-  display: flex;
-  flex-direction: row;
-}
-
-.header-menu-right a {
-  text-decoration: none;
-  color: white;
-  font-size: 12px;
-  font-weight: 900;
-  margin: 20px 20px 20px 20px;
-}
-
-.header-menu-right a:hover {
-  color: #d2cdcd;
-}
 
 .blogFooter {
   height: 200px;
@@ -221,4 +151,5 @@ export default {
   text-align: center;
   padding-bottom: 30px;
 }
+
 </style>
