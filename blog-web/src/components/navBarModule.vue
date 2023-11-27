@@ -76,6 +76,12 @@ export default {
     },
     toggleNav() {
       this.showNav = !this.showNav;
+
+      if (this.showNav) {
+        document.body.classList.add('no-scroll');
+      } else {
+        document.body.classList.remove('no-scroll');
+      }
     },
   },
   mounted() {
