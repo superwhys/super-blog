@@ -21,7 +21,11 @@
       </el-main>
       <el-footer class="blogFooter" style="height: 100%">
         <div>
-          <slot name="blogFooterShow"></slot>
+          <slot name="blogFooterShow">
+            <p>
+              <a class="record" href="https://beian.miit.gov.cn" target="_blank">粤ICP备2023142150号-1</a>
+            </p>
+          </slot>
           <span style="color: grey;">Copyright © SuperYong Blog 2023</span>
         </div>
       </el-footer>
@@ -150,6 +154,11 @@ export default {
   font-size: 14px;
   text-align: center;
   padding-bottom: 30px;
+}
+
+.record {
+  color: grey;
+  text-decoration: none;
 }
 
 </style>
