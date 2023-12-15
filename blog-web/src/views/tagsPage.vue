@@ -15,10 +15,10 @@
           </div>
           <ul class="tagsGroupPosts">
             <router-link class="tagsGroupPost" v-for="post in groupTagPosts" :to="'/post'+post.info.toEndPoint" :key="post.info.title" tag="li">
-              <div class="tagsGroupPostTitle">
+              <div class="tagsGroupPostTitle oneLine">
                 {{ post.info.title }}
               </div>
-              <div class="tagsGroupPostSubTitle">
+              <div class="tagsGroupPostSubTitle oneLine">
                 {{ post.info.subTitle }}
               </div>
             </router-link>
@@ -138,5 +138,13 @@ export default {
   font-size: 20px;
   font-weight: bold;
   padding-bottom: 10px;
+}
+
+.oneLine {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  text-align: left;
 }
 </style>
