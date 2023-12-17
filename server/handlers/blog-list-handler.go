@@ -13,7 +13,14 @@ import (
 func BlogListHandler(ctx context.Context, localPostGetter *postmanager.LocalGetter) gin.HandlerFunc {
 	ctx = lg.With(ctx, "[BlogListHandler]")
 	return func(c *gin.Context) {
-		postList, _ := localPostGetter.GetPostList(ctx)
+		var pagination models.Pagination
+		if err := c.ShouldBind(&pagination); err != nil {
+			c.JSON(http.StatusBadRequest, models.PackResponseData(http.StatusBadRequest, "get blog list data failed", nil))
+			return
+		}
+		lg.Infoc(ctx, "get blog list data, pagination: %+v", pagination)
+
+		postList, _ := localPostGetter.GetPostList(ctx, pagination)
 		c.JSON(http.StatusOK, models.PackResponseData(http.StatusOK, "get blog list data success", postList))
 	}
 }

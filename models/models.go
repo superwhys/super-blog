@@ -2,6 +2,11 @@ package models
 
 import "time"
 
+type Pagination struct {
+	Page int `json:"page" form:"page,default=1"`
+	Size int `json:"size" form:"size,default=7"`
+}
+
 type ApiResponseData struct {
 	Message    string `json:"message"`
 	Data       any    `json:"data"`
@@ -40,6 +45,7 @@ type BlogItem struct {
 
 type BlogListItems struct {
 	Items []*BlogItem `json:"items"`
+	Total int         `json:"total"`
 }
 
 type TagItem struct {

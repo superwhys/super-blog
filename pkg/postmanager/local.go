@@ -17,14 +17,26 @@ import (
 type LocalGetter struct {
 	sync.RWMutex
 	postBaseDir string
-	posts       map[string]*models.BlogItem
+	postsMap    map[string]*models.BlogItem
+	posts       []*models.BlogItem
+	postsIdxMap map[string]int
 }
 
 func NewLocalPostGetter(postBaseDir string) *LocalGetter {
 	entries, err := os.ReadDir(postBaseDir)
 	lg.PanicError(err)
 
-	posts := make(map[string]*models.BlogItem)
+	postsMap := make(map[string]*models.BlogItem)
+	postsIdxMap := make(map[string]int)
+	posts := make([]*models.BlogItem, 0, len(entries))
+
+	l := &LocalGetter{
+		postBaseDir: postBaseDir,
+		postsMap:    postsMap,
+		posts:       posts,
+		postsIdxMap: postsIdxMap,
+	}
+
 	for _, entry := range entries {
 		if entry.IsDir() {
 			continue
@@ -39,32 +51,47 @@ func NewLocalPostGetter(postBaseDir string) *LocalGetter {
 			continue
 		}
 
-		posts[entry.Name()] = blogItem
+		l.insertPost(context.Background(), blogItem)
 	}
 
-	return &LocalGetter{
-		postBaseDir: postBaseDir,
-		posts:       posts,
-	}
+	return l
 }
 
-func (l *LocalGetter) GetPostList(ctx context.Context) (*models.BlogListItems, error) {
+func (l *LocalGetter) insertPost(ctx context.Context, item *models.BlogItem) {
+	insertIdx := sort.Search(len(l.posts), func(i int) bool {
+		if l.posts[i].PostedTime == item.PostedTime {
+			return l.posts[i].Title > item.Title
+		}
+		return l.posts[i].ToEndPoint > item.ToEndPoint
+	})
+	l.posts = append(l.posts, nil)
+	copy(l.posts[insertIdx+1:], l.posts[insertIdx:])
+	l.posts[insertIdx] = item
+	l.postsIdxMap[item.FileName] = insertIdx
+	l.postsMap[item.FileName] = item
+}
+
+func (l *LocalGetter) GetPostList(ctx context.Context, pagination models.Pagination) (*models.BlogListItems, error) {
 	l.RLock()
 	defer l.RUnlock()
 
-	var posts []*models.BlogItem
-	for _, value := range l.posts {
-		posts = append(posts, value)
-	}
-
-	sort.Slice(posts, func(i, j int) bool {
-		if posts[i].PostedTime == posts[j].PostedTime {
-			return posts[i].Title > posts[j].Title
+	startIdx, endIdx := func() (int, int) {
+		if pagination.Page == -1 && pagination.Size == -1 {
+			return 0, len(l.posts)
 		}
-		return posts[i].ToEndPoint > posts[j].ToEndPoint
-	})
+		startIdx := (pagination.Page - 1) * pagination.Size
+		endIdx := startIdx + pagination.Size
+		if endIdx > len(l.posts) {
+			endIdx = len(l.posts)
+		}
+		return startIdx, endIdx
+	}()
+
+	posts := l.posts[startIdx:endIdx]
+
 	return &models.BlogListItems{
 		Items: posts,
+		Total: len(l.posts),
 	}, nil
 }
 
@@ -72,7 +99,7 @@ func (l *LocalGetter) GetSpecifyPost(ctx context.Context, postName string) (*mod
 	l.RLock()
 	defer l.RUnlock()
 
-	post, exists := l.posts[postName]
+	post, exists := l.postsMap[postName]
 	if !exists {
 		return nil, fmt.Errorf("post: %v not exists!", postName)
 	}
@@ -114,7 +141,13 @@ func (l *LocalGetter) AddOrUpdatePost(ctx context.Context, item *models.BlogItem
 		return errors.Wrap(err, "writeNewPostToFile")
 	}
 
-	l.posts[item.FileName] = item
+	if _, exists := l.postsMap[item.FileName]; !exists {
+		l.insertPost(ctx, item)
+	} else {
+		l.posts[l.postsIdxMap[item.FileName]] = item
+		l.postsMap[item.FileName] = item
+	}
+
 	return nil
 }
 
@@ -122,6 +155,17 @@ func (l *LocalGetter) DeletePost(ctx context.Context, fileName string) error {
 	l.Lock()
 	defer l.Unlock()
 
-	delete(l.posts, fileName)
+	postIdx, exists := l.postsIdxMap[fileName]
+	if !exists {
+		return fmt.Errorf("post: %v not exists!", fileName)
+	}
+
+	// delete from l.posts
+	l.posts = append(l.posts[:postIdx], l.posts[postIdx+1:]...)
+	// delete from l.postsIdxMap
+	delete(l.postsIdxMap, fileName)
+	// delete from l.postsMap
+	delete(l.postsMap, fileName)
+
 	return nil
 }

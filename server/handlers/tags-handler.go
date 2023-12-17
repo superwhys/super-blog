@@ -16,7 +16,7 @@ import (
 func GetTagsHandler(ctx context.Context, localPostGetter *postmanager.LocalGetter) gin.HandlerFunc {
 	ctx = lg.With(ctx, "[GetTagsHandler]")
 	return func(c *gin.Context) {
-		postList, err := localPostGetter.GetPostList(ctx)
+		postList, err := localPostGetter.GetPostList(ctx, models.Pagination{Page: -1, Size: -1})
 		if err != nil {
 			lg.Errorc(ctx, "get local post list error: %v", err)
 			c.JSON(http.StatusInternalServerError, models.PackResponseData(http.StatusInternalServerError, "get tags failed", nil))

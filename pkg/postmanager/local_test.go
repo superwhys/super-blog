@@ -23,7 +23,7 @@ func TestMain(m *testing.M) {
 func TestLocalGetter_GetPostList(t *testing.T) {
 	wantErr := false
 	t.Run("getPostList", func(t *testing.T) {
-		got, err := localGetter.GetPostList(context.Background())
+		got, err := localGetter.GetPostList(context.Background(), models.Pagination{Page: 1, Size: 7})
 		if (err != nil) != wantErr {
 			t.Errorf("LocalGetter.GetPostList() error = %v, wantErr %v", err, wantErr)
 			return

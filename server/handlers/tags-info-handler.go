@@ -12,7 +12,7 @@ import (
 )
 
 func getTagsInfo(ctx context.Context, localPostGetter *postmanager.LocalGetter) (map[string][]*models.TagItem, error) {
-	postList, err := localPostGetter.GetPostList(ctx)
+	postList, err := localPostGetter.GetPostList(ctx, models.Pagination{Page: -1, Size: -1})
 	if err != nil {
 		return nil, errors.Wrap(err, "get post list")
 	}
