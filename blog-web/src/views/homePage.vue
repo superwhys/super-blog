@@ -22,6 +22,14 @@
               :to-end-point="item.toEndPoint"
           >
           </blog-list-item>
+          <div class="pagination">
+            <div class="paginationItems" @click="newerClick" v-show="page !== 1">
+              < Newer Posts
+            </div>
+            <div class="paginationItems" @click="olderClick" v-show="page * pageSize < postList.total">
+              Older Posts >
+            </div>
+          </div>
         </div>
       </template>
       <template v-slot:blogRightMainShow>
@@ -47,7 +55,9 @@ export default {
   components: {AboutMeModule, TagsModule, BlogListItem, BasePage},
   data() {
     return {
-      postList: new BlogList({items: []})
+      page: 1,
+      pageSize: 7,
+      postList: new BlogList({items: [], total: 0})
     }
   },
   created() {
@@ -61,7 +71,7 @@ export default {
       console.debug(`reload post list`)
       console.debug(this.postList)
     } else {
-      getBlogItemList().then(resp => {
+      getBlogItemList(this.page, this.pageSize).then(resp => {
         console.debug(resp)
         if (resp.data) {
           this.postList = new BlogList(resp.data)
@@ -70,6 +80,38 @@ export default {
           }
         }
       });
+    }
+  },
+  methods: {
+    newerClick() {
+      console.debug(`newerClick`)
+      if (this.page > 1) {
+        this.page -= 1
+        getBlogItemList(this.page, this.pageSize).then(resp => {
+          console.debug(resp)
+          if (resp.data) {
+            this.postList = new BlogList(resp.data)
+            for (let post of this.postList.items) {
+              this.$store.commit('setPost', post);
+            }
+          }
+        });
+      }
+    },
+    olderClick() {
+      console.debug(`olderClick`)
+      if (this.page * this.pageSize < this.postList.total) {
+        this.page += 1
+        getBlogItemList(this.page, this.pageSize).then(resp => {
+          console.debug(resp)
+          if (resp.data) {
+            this.postList = new BlogList(resp.data)
+            for (let post of this.postList.items) {
+              this.$store.commit('setPost', post);
+            }
+          }
+        });
+      }
     }
   }
 }
@@ -93,5 +135,24 @@ export default {
   width: 100%;
   display: flex;
   flex-direction: column;
+}
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.paginationItems {
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 17px 25px;
+  border: 1px solid var(--solidLineColor);
+}
+
+.paginationItems:hover {
+  color: #fff;
+  background-color: #0085a1;
 }
 </style>
