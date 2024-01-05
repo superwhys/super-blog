@@ -62,7 +62,7 @@ func (l *LocalGetter) insertPost(ctx context.Context, item *models.BlogItem) {
 		if l.posts[i].PostedTime == item.PostedTime {
 			return l.posts[i].Title > item.Title
 		}
-		return l.posts[i].ToEndPoint > item.ToEndPoint
+		return l.posts[i].ToEndPoint < item.ToEndPoint
 	})
 	l.posts = append(l.posts, nil)
 	copy(l.posts[insertIdx+1:], l.posts[insertIdx:])
