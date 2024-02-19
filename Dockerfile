@@ -22,7 +22,7 @@ FROM alpine:latest
 WORKDIR /app
 COPY --from=builder /app/server-go /app/server-go
 COPY ./config.yaml /app/config.yaml
-COPY ./blog-posts /app/blog-posts
+# COPY ./blog-posts /app/blog-posts
 
 ENTRYPOINT ["/app/server-go", "-f", "/app/config.yaml"]
 

@@ -3,8 +3,17 @@ services:
   super-blog:
     build: .
     container_name: super-blog 
-    ports:
-      - 29913:29913
+      # ports:
+      #   - 29913:29913
+    volumes:
+      - ./blog-posts:/app/blog-posts
+    networks:
+      - yong-network
     logging:
       options:
         max-size: 100m
+
+networks:
+  yong-network:
+    external: true
+    name: yong-network
