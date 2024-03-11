@@ -37,7 +37,7 @@ func NewBlogServer(localGetter *postmanager.LocalGetter, githubGetter *postmanag
 }
 
 func (bs *BlogServer) registerPostHandlers(base *gin.RouterGroup, handlerFuncs ...gin.HandlerFunc) {
-	postGroup := base.Group("/post")
+	postGroup := base.Group("/post", handlerFuncs...)
 	{
 		postGroup.GET("/", handlers.BlogListHandler(bs.ctx, bs.localPostGetter))
 		postGroup.GET("/:year/:month/:day/:name", handlers.PostHandler(bs.ctx, bs.localPostGetter))
@@ -45,7 +45,7 @@ func (bs *BlogServer) registerPostHandlers(base *gin.RouterGroup, handlerFuncs .
 }
 
 func (bs *BlogServer) registerTagHandlers(base *gin.RouterGroup, handlerFuncs ...gin.HandlerFunc) {
-	tagGroup := base.Group("/tag")
+	tagGroup := base.Group("/tag", handlerFuncs...)
 	{
 		tagGroup.GET("/", handlers.GetTagsHandler(bs.ctx, bs.localPostGetter))
 		tagGroup.GET("/info", handlers.GetTagsInfoHandler(bs.ctx, bs.localPostGetter))
@@ -54,7 +54,7 @@ func (bs *BlogServer) registerTagHandlers(base *gin.RouterGroup, handlerFuncs ..
 }
 
 func (bs *BlogServer) registerGithubHandlers(base *gin.RouterGroup, handlerFuncs ...gin.HandlerFunc) {
-	githubGroup := base.Group("/github")
+	githubGroup := base.Group("/github", handlerFuncs...)
 	{
 		githubGroup.POST("/hook", handlers.GithubHookHandler(bs.ctx, bs.localPostGetter, bs.githubGetter))
 	}
