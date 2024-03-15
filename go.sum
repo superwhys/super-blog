@@ -1164,8 +1164,8 @@ github.com/stretchr/testify v1.8.4/go.mod h1:sz/lmYIOXD/1dqDmKjjqLyZ2RngseejIcXl
 github.com/subosito/gotenv v1.2.0/go.mod h1:N0PQaV/YGNqwC0u51sEeR/aUtSLEXKX9iv69rRypqCw=
 github.com/subosito/gotenv v1.6.0 h1:9NlTDc1FTs4qu0DDq7AEtTPNw6SVm7uBMsUCUjABIf8=
 github.com/subosito/gotenv v1.6.0/go.mod h1:Dk4QP5c2W3ibzajGcXpNraDfq2IrhjMIvMSWPKKo0FU=
-github.com/superwhys/goutils v0.0.0-20240311075343-cb5e8c46ff86 h1:WpvU3P7UjK/hnhdBbYIlg9l49v0Jt+24ZkCXnQiTHiI=
-github.com/superwhys/goutils v0.0.0-20240311075343-cb5e8c46ff86/go.mod h1:WZP2YujiWsCygLDvCdyqQh3QYAhw/wUxYIFtKusCjdw=
+github.com/superwhys/goutils v0.0.0-20240315040937-35c9905a964f h1:72blecYyYIJbW19uroZcBW/ntJDh9qVb9GFHprjPFN8=
+github.com/superwhys/goutils v0.0.0-20240315040937-35c9905a964f/go.mod h1:7U+F4P9vIK8nqoOBqnHs2b0IgXiWZ0h58FMfEG9ugTc=
 github.com/tv42/httpunix v0.0.0-20150427012821-b75d8614f926/go.mod h1:9ESjWnEqriFuLhtthL60Sar/7RFoluCcXsuvEwTV5KM=
 github.com/twitchyliquid64/golang-asm v0.15.1 h1:SU5vSMR7hnwNxj24w34ZyCi/FmDZTkS4MhqMhdFk5YI=
 github.com/twitchyliquid64/golang-asm v0.15.1/go.mod h1:a1lVb/DtPvCB8fslRZhAngC2+aY1QWCk3Cedj/Gdt08=

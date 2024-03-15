@@ -7,11 +7,10 @@ require (
 	github.com/gobuffalo/packr/v2 v2.8.3
 	github.com/google/go-github/v53 v53.2.0
 	github.com/pkg/errors v0.9.1
-	github.com/superwhys/goutils v0.0.0-20240311075343-cb5e8c46ff86
+	github.com/superwhys/goutils v0.0.0-20240315040937-35c9905a964f
 	golang.org/x/oauth2 v0.14.0
 	golang.org/x/sync v0.5.0
 	gopkg.in/yaml.v3 v3.0.1
-	gorm.io/driver/mysql v1.5.4
 	gorm.io/gorm v1.25.7
 )
 
@@ -127,4 +126,5 @@ require (
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/mgo.v2 v2.0.0-20190816093944-a6b53ec6cb22 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1 // indirect
+	gorm.io/driver/mysql v1.5.4 // indirect
 )
