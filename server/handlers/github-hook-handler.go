@@ -14,7 +14,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func GithubHookHandler(ctx context.Context, localGetter *postmanager.LocalGetter, githubGetter *postmanager.GithubGetter) gin.HandlerFunc {
+func GithubHookHandler(hctx *HandlerContext, githubGetter *postmanager.GithubGetter) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		reqEvent := c.GetHeader("X-GitHub-Event")
 		if reqEvent != "push" {
@@ -41,8 +41,8 @@ func GithubHookHandler(ctx context.Context, localGetter *postmanager.LocalGetter
 
 		addOrUpdate, removedFile, _ := parseCommit(event.Commits)
 
-		handleAddOrUpdateFile(lg.With(ctx, "[AddOrUpdate]"), addOrUpdate.Slice(), localGetter, githubGetter)
-		handleDelededFile(lg.With(ctx, "[DeleteFile]"), removedFile.Slice(), localGetter)
+		handleAddOrUpdateFile(lg.With(hctx.ctx, "[AddOrUpdate]"), addOrUpdate.Slice(), hctx.postManager, githubGetter)
+		handleDelededFile(lg.With(hctx.ctx, "[DeleteFile]"), removedFile.Slice(), hctx.postManager)
 	}
 }
 
@@ -75,7 +75,7 @@ func parseCommit(commits []*models.GithubCommit) (addOrUdpate slices.StringSet, 
 	return
 }
 
-func handleAddOrUpdateFile(ctx context.Context, files []string, localGetter *postmanager.LocalGetter, githubGetter *postmanager.GithubGetter) error {
+func handleAddOrUpdateFile(ctx context.Context, files []string, postManager postmanager.PostManager, githubGetter *postmanager.GithubGetter) error {
 	if len(files) == 0 {
 		return nil
 	}
@@ -98,7 +98,13 @@ func handleAddOrUpdateFile(ctx context.Context, files []string, localGetter *pos
 				return errors.Wrap(err, "github get post content")
 			}
 
-			if err := localGetter.AddOrUpdatePost(ctx, blogItem); err != nil {
+			_, err = postManager.GetPost(ctx, blogItem.FileName)
+			if err != nil {
+				lg.Errorc(ctx, "get post error: %v", err)
+				return errors.Wrap(err, "get post error")
+			}
+
+			if err := postManager.UpdatePost(ctx, blogItem); err != nil {
 				lg.Errorc(ctx, "process file: %v error: %v", file, err)
 				return errors.Wrap(err, "AddOrUpdatePost")
 			}
@@ -111,10 +117,10 @@ func handleAddOrUpdateFile(ctx context.Context, files []string, localGetter *pos
 	return grp.Wait()
 }
 
-func handleDelededFile(ctx context.Context, files []string, localGetter *postmanager.LocalGetter) error {
+func handleDelededFile(ctx context.Context, files []string, postManager postmanager.PostManager) error {
 	for _, file := range files {
 		fileName := filepath.Base(file)
-		localGetter.DeletePost(ctx, fileName)
+		postManager.DeletePost(ctx, fileName)
 	}
 	return nil
 }

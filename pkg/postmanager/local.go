@@ -51,16 +51,16 @@ func NewLocalPostGetter(postBaseDir string) *LocalGetter {
 			continue
 		}
 
-		l.insertPost(context.Background(), blogItem)
+		l.insertPost(blogItem)
 	}
 
 	return l
 }
 
-func (l *LocalGetter) insertPost(ctx context.Context, item *models.BlogItem) {
+func (l *LocalGetter) insertPost(item *models.BlogItem) {
 	insertIdx := sort.Search(len(l.posts), func(i int) bool {
 		if l.posts[i].PostedTime == item.PostedTime {
-			return l.posts[i].Title > item.Title
+			return l.posts[i].MetaData.Title > item.MetaData.Title
 		}
 		return l.posts[i].ToEndPoint < item.ToEndPoint
 	})
@@ -69,6 +69,10 @@ func (l *LocalGetter) insertPost(ctx context.Context, item *models.BlogItem) {
 	l.posts[insertIdx] = item
 	l.postsIdxMap[item.FileName] = insertIdx
 	l.postsMap[item.FileName] = item
+}
+
+func (l *LocalGetter) GetTotalPostCount(ctx context.Context) (int64, error) {
+	return int64(len(l.posts)), nil
 }
 
 func (l *LocalGetter) GetPostList(ctx context.Context, pagination models.Pagination) (*models.BlogListItems, error) {
@@ -95,7 +99,7 @@ func (l *LocalGetter) GetPostList(ctx context.Context, pagination models.Paginat
 	}, nil
 }
 
-func (l *LocalGetter) GetSpecifyPost(ctx context.Context, postName string) (*models.BlogItem, error) {
+func (l *LocalGetter) GetPost(ctx context.Context, postName string) (*models.BlogItem, error) {
 	l.RLock()
 	defer l.RUnlock()
 
@@ -114,25 +118,41 @@ func readFile(path string) (string, error) {
 	return string(b), nil
 }
 
+func decodeContent(ctx context.Context, content string) (string, error) {
+	b, err := base64.StdEncoding.DecodeString(content)
+	if err != nil {
+		lg.Errorc(ctx, "decode content error: %v", err)
+		return "", err
+	}
+	return string(b), nil
+}
+
 func writePostToFile(ctx context.Context, basePostDir string, blogItem *models.BlogItem) error {
 	file, err := os.Create(filepath.Join(basePostDir, blogItem.FileName))
 	if err != nil {
 		return errors.Wrap(err, "create file")
 	}
 
-	content, err := base64.StdEncoding.DecodeString(blogItem.RawContent)
+	var (
+		metaContent string
+		postContent string
+	)
+	metaContent, err = decodeContent(ctx, blogItem.MetaRow)
+	postContent, err = decodeContent(ctx, blogItem.PostContent)
 	if err != nil {
-		return errors.Wrap(err, "decode raw content")
+		return errors.Wrap(err, "decode content")
 	}
 
-	_, err = file.Write(content)
+	content := fmt.Sprintf("%v\n%v", metaContent, postContent)
+
+	_, err = file.Write([]byte(content))
 	if err != nil {
 		return errors.Wrap(err, "write content to string")
 	}
 	return nil
 }
 
-func (l *LocalGetter) AddOrUpdatePost(ctx context.Context, item *models.BlogItem) error {
+func (l *LocalGetter) UpdatePost(ctx context.Context, item *models.BlogItem) error {
 	l.Lock()
 	defer l.Unlock()
 
@@ -141,9 +161,7 @@ func (l *LocalGetter) AddOrUpdatePost(ctx context.Context, item *models.BlogItem
 		return errors.Wrap(err, "writeNewPostToFile")
 	}
 
-	if _, exists := l.postsMap[item.FileName]; !exists {
-		l.insertPost(ctx, item)
-	} else {
+	if _, exists := l.postsMap[item.FileName]; exists {
 		l.posts[l.postsIdxMap[item.FileName]] = item
 		l.postsMap[item.FileName] = item
 	}

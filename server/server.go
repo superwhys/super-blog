@@ -7,6 +7,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/gobuffalo/packr/v2"
+	"github.com/superwhys/goutils/ginutils"
 	"github.com/superwhys/goutils/lg"
 	"github.com/superwhys/superBlog/pkg/postmanager"
 	"github.com/superwhys/superBlog/server/handlers"
@@ -14,49 +15,76 @@ import (
 )
 
 type BlogServer struct {
-	ctx                context.Context
+	ctx                *handlers.HandlerContext
 	secretToken        string
 	autoHookFileChange bool
 	engine             *gin.Engine
-	localPostGetter    *postmanager.LocalGetter
+	postManager        postmanager.PostManager
 	githubGetter       *postmanager.GithubGetter
 }
 
-func NewBlogServer(localGetter *postmanager.LocalGetter, githubGetter *postmanager.GithubGetter, secretToken string, autoHookFileChange bool) *BlogServer {
-	ctx := lg.With(context.Background(), "[BlogServer]")
-
-	router := gin.Default()
+func NewBlogServer(postManager postmanager.PostManager, githubGetter *postmanager.GithubGetter, secretToken string, autoHookFileChange bool) *BlogServer {
+	ctx := handlers.NewContext(postManager)
+	router := ginutils.NewGinEngine()
 	return &BlogServer{
 		ctx:                ctx,
 		engine:             router,
 		secretToken:        secretToken,
-		localPostGetter:    localGetter,
+		postManager:        postManager,
 		githubGetter:       githubGetter,
 		autoHookFileChange: autoHookFileChange,
 	}
 }
 
+func (bs *BlogServer) CheckPosts() error {
+	ctx := context.Background()
+	count, err := bs.postManager.GetTotalPostCount(ctx)
+	if err != nil {
+		return err
+	}
+
+	if count != 0 {
+		return nil
+	}
+
+	posts, err := bs.githubGetter.GetPostList(ctx)
+	if err != nil {
+		return err
+	}
+
+	for _, post := range posts {
+		postItem, err := bs.githubGetter.GetSpecifyPost(ctx, post)
+		if err != nil {
+			lg.Errorf("get post: %v error: %v", post, err)
+			continue
+		}
+		bs.postManager.UpdatePost(ctx, postItem)
+	}
+
+	return nil
+}
+
 func (bs *BlogServer) registerPostHandlers(base *gin.RouterGroup, handlerFuncs ...gin.HandlerFunc) {
 	postGroup := base.Group("/post", handlerFuncs...)
 	{
-		postGroup.GET("/", handlers.BlogListHandler(bs.ctx, bs.localPostGetter))
-		postGroup.GET("/:year/:month/:day/:name", handlers.PostHandler(bs.ctx, bs.localPostGetter))
+		postGroup.GET("/", handlers.BlogListHandler(bs.ctx))
+		postGroup.GET("/:year/:month/:day/:name", handlers.PostHandler(bs.ctx))
 	}
 }
 
 func (bs *BlogServer) registerTagHandlers(base *gin.RouterGroup, handlerFuncs ...gin.HandlerFunc) {
 	tagGroup := base.Group("/tag", handlerFuncs...)
 	{
-		tagGroup.GET("/", handlers.GetTagsHandler(bs.ctx, bs.localPostGetter))
-		tagGroup.GET("/info", handlers.GetTagsInfoHandler(bs.ctx, bs.localPostGetter))
-		tagGroup.GET("/info/:tag", handlers.GetSpecifyTagInfoHandler(bs.ctx, bs.localPostGetter))
+		tagGroup.GET("/", handlers.GetTagsHandler(bs.ctx))
+		tagGroup.GET("/info", handlers.GetTagsInfoHandler(bs.ctx))
+		tagGroup.GET("/info/:tag", handlers.GetSpecifyTagInfoHandler(bs.ctx))
 	}
 }
 
 func (bs *BlogServer) registerGithubHandlers(base *gin.RouterGroup, handlerFuncs ...gin.HandlerFunc) {
 	githubGroup := base.Group("/github", handlerFuncs...)
 	{
-		githubGroup.POST("/hook", handlers.GithubHookHandler(bs.ctx, bs.localPostGetter, bs.githubGetter))
+		githubGroup.POST("/hook", handlers.GithubHookHandler(bs.ctx, bs.githubGetter))
 	}
 }
 
@@ -77,7 +105,7 @@ func (bs *BlogServer) Handler(box *packr.Box) *gin.Engine {
 	bs.registerPostHandlers(apiGroup)
 	bs.registerTagHandlers(apiGroup)
 	if bs.autoHookFileChange {
-		bs.registerGithubHandlers(apiGroup, middlewares.GithubVerifyMiddleware(bs.ctx, bs.secretToken))
+		bs.registerGithubHandlers(apiGroup, middlewares.GithubVerifyMiddleware(bs.secretToken))
 	}
 
 	return bs.engine

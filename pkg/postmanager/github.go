@@ -21,6 +21,19 @@ func NewGithubGetter(client *github.Client) *GithubGetter {
 	}
 }
 
+func (g *GithubGetter) GetPostList(ctx context.Context) ([]string, error) {
+	_, dirContent, _, err := g.client.Repositories.GetContents(ctx, share.Owner, share.Repo, "", nil)
+	if err != nil {
+		return nil, errors.Wrap(err, "get dir list")
+	}
+
+	var resp []string
+	for _, dc := range dirContent {
+		resp = append(resp, *dc.Name)
+	}
+	return resp, nil
+}
+
 func (g *GithubGetter) GetSpecifyPost(ctx context.Context, postName string) (*models.BlogItem, error) {
 	fileSubMatch := FindPostFileNameSubMatch(filepath.Base(postName))
 	if len(fileSubMatch) != 3 {

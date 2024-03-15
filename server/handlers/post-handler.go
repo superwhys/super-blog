@@ -1,14 +1,12 @@
 package handlers
 
 import (
-	"context"
 	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/superwhys/goutils/lg"
 	"github.com/superwhys/superBlog/models"
-	"github.com/superwhys/superBlog/pkg/postmanager"
 )
 
 type postHandlerParams struct {
@@ -18,8 +16,8 @@ type postHandlerParams struct {
 	Name  string `form:"name" binding:"required"`
 }
 
-func PostHandler(ctx context.Context, localGetter *postmanager.LocalGetter) gin.HandlerFunc {
-	ctx = lg.With(ctx, "[PostHandler]")
+func PostHandler(hctx *HandlerContext) gin.HandlerFunc {
+	ctx := lg.With(hctx.ctx, "[PostHandler]")
 	return func(c *gin.Context) {
 		params := postHandlerParams{
 			Year:  c.Param("year"),
@@ -29,12 +27,13 @@ func PostHandler(ctx context.Context, localGetter *postmanager.LocalGetter) gin.
 		}
 
 		fileName := fmt.Sprintf("%v-%v-%v-%v.md", params.Year, params.Month, params.Day, params.Name)
-		blogItem, err := localGetter.GetSpecifyPost(ctx, fileName)
+		blogItem, err := hctx.postManager.GetPost(ctx, fileName)
 		if err != nil {
 			lg.Errorc(ctx, "get post: %v error: %v", fileName, err)
 			c.JSON(http.StatusBadRequest, models.PackResponseData(http.StatusBadRequest, fmt.Sprintf("get post: %v failed", fileName), nil))
 			return
 		}
+		blogItem.DecodeContent()
 
 		c.JSON(http.StatusOK, models.PackResponseData(http.StatusOK, fmt.Sprintf("get post: %v success", fileName), blogItem))
 	}

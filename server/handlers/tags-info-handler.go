@@ -11,8 +11,8 @@ import (
 	"github.com/superwhys/superBlog/pkg/postmanager"
 )
 
-func getTagsInfo(ctx context.Context, localPostGetter *postmanager.LocalGetter) (map[string][]*models.TagItem, error) {
-	postList, err := localPostGetter.GetPostList(ctx, models.Pagination{Page: -1, Size: -1})
+func getTagsInfo(ctx context.Context, postManager postmanager.PostManager) (map[string][]*models.TagItem, error) {
+	postList, err := postManager.GetPostList(ctx, models.Pagination{Page: -1, Size: -1})
 	if err != nil {
 		return nil, errors.Wrap(err, "get post list")
 	}
@@ -20,12 +20,12 @@ func getTagsInfo(ctx context.Context, localPostGetter *postmanager.LocalGetter) 
 	tagsInfo := make(map[string][]*models.TagItem)
 	for _, post := range postList.Items {
 		for _, tag := range post.MetaData.Tags {
-			if _, exists := tagsInfo[tag]; !exists {
-				tagsInfo[tag] = make([]*models.TagItem, 0)
+			if _, exists := tagsInfo[tag.Tag]; !exists {
+				tagsInfo[tag.Tag] = make([]*models.TagItem, 0)
 			}
 
-			tagsInfo[tag] = append(tagsInfo[tag], &models.TagItem{
-				Tag:  tag,
+			tagsInfo[tag.Tag] = append(tagsInfo[tag.Tag], &models.TagItem{
+				Tag:  tag.Tag,
 				Info: post,
 			})
 		}
@@ -33,10 +33,10 @@ func getTagsInfo(ctx context.Context, localPostGetter *postmanager.LocalGetter) 
 	return tagsInfo, nil
 }
 
-func GetTagsInfoHandler(ctx context.Context, localPostGetter *postmanager.LocalGetter) gin.HandlerFunc {
-	ctx = lg.With(ctx, "[GetTagsInfoHandler]")
+func GetTagsInfoHandler(hctx *HandlerContext) gin.HandlerFunc {
+	ctx := lg.With(hctx.ctx, "[GetTagsInfoHandler]")
 	return func(c *gin.Context) {
-		tagsInfo, err := getTagsInfo(ctx, localPostGetter)
+		tagsInfo, err := getTagsInfo(ctx, hctx.postManager)
 		if err != nil {
 			lg.Errorc(ctx, "get tags info error: %v", err)
 			c.JSON(http.StatusInternalServerError, models.PackResponseData(http.StatusInternalServerError, "get tags info failed", nil))
@@ -47,8 +47,8 @@ func GetTagsInfoHandler(ctx context.Context, localPostGetter *postmanager.LocalG
 	}
 }
 
-func GetSpecifyTagInfoHandler(ctx context.Context, localPostGetter *postmanager.LocalGetter) gin.HandlerFunc {
-	ctx = lg.With(ctx, "[GetSpecifyTagInfoHandler]")
+func GetSpecifyTagInfoHandler(hctx *HandlerContext) gin.HandlerFunc {
+	ctx := lg.With(hctx.ctx, "[GetSpecifyTagInfoHandler]")
 	return func(c *gin.Context) {
 		tag := c.Param("tag")
 		if tag == "" {
@@ -57,7 +57,7 @@ func GetSpecifyTagInfoHandler(ctx context.Context, localPostGetter *postmanager.
 			return
 		}
 
-		tagsInfo, err := getTagsInfo(ctx, localPostGetter)
+		tagsInfo, err := getTagsInfo(ctx, hctx.postManager)
 		if err != nil {
 			lg.Errorc(ctx, "get tags info error: %v", err)
 			c.JSON(http.StatusInternalServerError, models.PackResponseData(http.StatusInternalServerError, "get tags info failed", nil))
