@@ -14,7 +14,7 @@
           <blog-list-item
               v-for="item in postList.items"
               class="flyInFromBottom"
-              :key="item.title"
+              :key="item.metaData.title"
               :title="item.metaData.title"
               :sub-title="item.metaData.subTitle"
               :post-content="item.postContent"

@@ -20,16 +20,12 @@ export class BlogItem {
     constructor({
                     metaData = {},
                     fileName = "",
-                    title = "",
-                    subTitle = "",
                     postContent = "",
                     postedTime = "",
                     toEndPoint = ""
                 }) {
         this.metaData = new BlogMetaData(metaData)
         this.fileName = fileName
-        this.title = title
-        this.subTitle = subTitle
         this.postContent = postContent
         this.postedTime = postedTime
         this.toEndPoint = toEndPoint

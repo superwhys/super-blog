@@ -3,7 +3,7 @@
     <base-page>
       <template v-slot:blogHeaderImgInnerShow>
         <div class="imgTitle flyInFromTop">
-          {{ postItem.title }}
+          {{ postItem.metaData.title }}
         </div>
         <div class="imgTag flyInFromTop">
           <tag-item

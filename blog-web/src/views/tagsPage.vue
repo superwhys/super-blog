@@ -14,12 +14,12 @@
             {{ groupTag }}
           </div>
           <ul class="tagsGroupPosts">
-            <router-link class="tagsGroupPost" v-for="post in groupTagPosts" :to="'/post'+post.info.toEndPoint" :key="post.info.title" tag="li">
+            <router-link class="tagsGroupPost" v-for="post in groupTagPosts" :to="'/post'+post.info.toEndPoint" :key="post.info.metaData.title" tag="li">
               <div class="tagsGroupPostTitle oneLine">
-                {{ post.info.title }}
+                {{ post.info.metaData.title }}
               </div>
               <div class="tagsGroupPostSubTitle oneLine">
-                {{ post.info.subTitle }}
+                {{ post.info.metaData.subTitle }}
               </div>
             </router-link>
           </ul>
