@@ -11,7 +11,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
-	"github.com/superwhys/goutils/lg"
+	"github.com/superwhys/venkit/lg"
 )
 
 func verifySignature(payload []byte, secretToken string, signatureHeader string) error {

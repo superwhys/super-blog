@@ -10,8 +10,8 @@ import (
 	"sync"
 
 	"github.com/pkg/errors"
-	"github.com/superwhys/goutils/lg"
 	"github.com/superwhys/superBlog/models"
+	"github.com/superwhys/venkit/lg"
 )
 
 type LocalGetter struct {

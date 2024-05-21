@@ -4,7 +4,7 @@ import (
 	"encoding/base64"
 	"time"
 
-	"github.com/superwhys/goutils/lg"
+	"github.com/superwhys/venkit/lg"
 	"gorm.io/gorm"
 )
 

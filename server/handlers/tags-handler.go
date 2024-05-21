@@ -6,9 +6,9 @@ import (
 	"sort"
 
 	"github.com/gin-gonic/gin"
-	"github.com/superwhys/goutils/lg"
-	"github.com/superwhys/goutils/slices"
 	"github.com/superwhys/superBlog/models"
+	"github.com/superwhys/venkit/lg"
+	"github.com/superwhys/venkit/slices"
 )
 
 func GetTagsHandler(hctx *HandlerContext) gin.HandlerFunc {

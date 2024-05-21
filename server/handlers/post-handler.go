@@ -5,8 +5,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/superwhys/goutils/lg"
 	"github.com/superwhys/superBlog/models"
+	"github.com/superwhys/venkit/lg"
 )
 
 type postHandlerParams struct {

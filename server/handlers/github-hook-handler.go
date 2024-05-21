@@ -7,10 +7,10 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
-	"github.com/superwhys/goutils/lg"
-	"github.com/superwhys/goutils/slices"
 	"github.com/superwhys/superBlog/models"
 	"github.com/superwhys/superBlog/pkg/postmanager"
+	"github.com/superwhys/venkit/lg"
+	"github.com/superwhys/venkit/slices"
 	"golang.org/x/sync/errgroup"
 )
 

@@ -7,11 +7,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/gobuffalo/packr/v2"
-	"github.com/superwhys/goutils/ginutils"
-	"github.com/superwhys/goutils/lg"
 	"github.com/superwhys/superBlog/pkg/postmanager"
 	"github.com/superwhys/superBlog/server/handlers"
 	"github.com/superwhys/superBlog/server/handlers/middlewares"
+	"github.com/superwhys/venkit/lg"
+	"github.com/superwhys/venkit/vgin"
 )
 
 type BlogServer struct {
@@ -25,7 +25,7 @@ type BlogServer struct {
 
 func NewBlogServer(postManager postmanager.PostManager, githubGetter *postmanager.GithubGetter, secretToken string, autoHookFileChange bool) *BlogServer {
 	ctx := handlers.NewContext(postManager)
-	router := ginutils.NewGinEngine()
+	router := vgin.NewGinEngine()
 	return &BlogServer{
 		ctx:                ctx,
 		engine:             router,

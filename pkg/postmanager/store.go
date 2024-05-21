@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"github.com/pkg/errors"
-	"github.com/superwhys/goutils/lg"
 	"github.com/superwhys/superBlog/models"
+	"github.com/superwhys/venkit/lg"
 	"gorm.io/gorm"
 )
 
