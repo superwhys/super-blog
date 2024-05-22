@@ -53,7 +53,9 @@ func (bs *BlogServer) CheckPosts() error {
 			lg.Errorf("get post: %v error: %v", post, err)
 			continue
 		}
-		bs.postManager.UpdatePost(ctx, postItem)
+		if err := bs.postManager.UpdatePost(ctx, postItem); err != nil {
+			lg.Errorc(ctx, "update post: %v error: %v", post, err)
+		}
 	}
 
 	return nil

@@ -85,11 +85,11 @@ func (ps *PostStore) getTag(tag string) (models.Tag, error) {
 
 func (ps *PostStore) checkItemTag(item *models.BlogItem) {
 	var tags []models.Tag
-	for _, tag := range item.MetaData.Tags {
-		if tag.Tag == "" {
+	for _, t := range item.MetaData.Tags {
+		if t.Tag == "" {
 			continue
 		}
-		tag, err := ps.getTag(tag.Tag)
+		tag, err := ps.getTag(t.Tag)
 		if err != nil {
 			continue
 		}
@@ -100,19 +100,28 @@ func (ps *PostStore) checkItemTag(item *models.BlogItem) {
 }
 
 func (ps *PostStore) UpdatePost(ctx context.Context, item *models.BlogItem) error {
-	var count int64
-	ps.db.Where(&models.BlogItem{FileName: item.FileName}).Count(&count)
-	ps.checkItemTag(item)
-
-	if count != 0 {
-		return ps.db.Where(&models.BlogItem{FileName: item.FileName}).Updates(item).Error
+	bi, err := ps.GetPost(ctx, item.FileName)
+	if err != nil {
+		return errors.Wrap(err, "GetPost")
 	}
 
-	return ps.db.Create(item).Error
+	if bi == nil {
+		if err = ps.db.Create(item).Error; err != nil {
+			return errors.Wrap(err, "Create")
+		}
+		return nil
+	}
 
-	// doUpdates := []string{"title", "sub_title", "date", "author", "tags", "meta_row", "post_content", "posted_time", "to_end_point"}
-	// return ps.db.Clauses(clause.OnConflict{
-	// 	Columns:   []clause.Column{{Name: "file_name"}},
-	// 	DoUpdates: clause.AssignmentColumns(doUpdates),
-	// }).Create(item).Error
+	lg.Debugc(ctx, "filename: %v", item.FileName)
+	ps.checkItemTag(item)
+
+	bi.MetaData = item.MetaData
+	bi.PostContent = item.PostContent
+	bi.PostedTime = item.PostedTime
+	bi.ToEndPoint = item.ToEndPoint
+
+	if err := ps.db.Model(bi).Association("Tags").Replace(item.MetaData.Tags); err != nil {
+		return errors.Wrap(err, "Replace")
+	}
+	return ps.db.Save(bi).Error
 }
