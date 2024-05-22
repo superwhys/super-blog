@@ -16,7 +16,7 @@ func BlogListHandler(hctx *HandlerContext) gin.HandlerFunc {
 			c.JSON(http.StatusBadRequest, models.PackResponseData(http.StatusBadRequest, "get blog list data failed", nil))
 			return
 		}
-		lg.Infoc(ctx, "get blog list data, pagination: %+v", pagination)
+		lg.Debugc(ctx, "get blog list data, pagination: %+v", pagination)
 
 		postList, err := hctx.postManager.GetPostList(ctx, pagination)
 		if err != nil {
