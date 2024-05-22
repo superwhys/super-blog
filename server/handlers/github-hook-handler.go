@@ -22,8 +22,9 @@ func GithubHookHandler(hctx *HandlerContext, githubGetter *postmanager.GithubGet
 			return
 		}
 
-		var event models.GithubPushEvent
+		event := new(models.GithubPushEvent)
 		if err := c.ShouldBind(&event); err != nil {
+			lg.Errorc(hctx.ctx, "bind params error: %v", err)
 			c.JSON(
 				http.StatusInternalServerError,
 				models.PackResponseData(http.StatusInternalServerError, err.Error(), nil),
