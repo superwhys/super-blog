@@ -14,7 +14,8 @@ type PostStore struct {
 }
 
 func NewPostStore(db *gorm.DB) *PostStore {
-	return &PostStore{db: db}
+	ps := &PostStore{db: db}
+	return ps
 }
 
 func (ps *PostStore) GetTotalPostCount(ctx context.Context) (int64, error) {
@@ -53,6 +54,9 @@ func (ps *PostStore) GetPostList(ctx context.Context, pagination models.Paginati
 func (ps *PostStore) GetPost(ctx context.Context, postName string) (*models.BlogItem, error) {
 	blog := &models.BlogItem{}
 	if err := ps.db.Preload("Tags").Where(&models.BlogItem{FileName: postName}).First(blog).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, nil
+		}
 		return nil, err
 	}
 	blog.MetaData.BackFillRowTags()

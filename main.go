@@ -58,9 +58,6 @@ func main() {
 		githubSecretToken(),
 		autoHookFileChange(),
 	)
-	if autoHookFileChange() {
-		lg.PanicError(blogSrv.CheckPosts())
-	}
 
 	srv := service.NewVkService(
 		service.WithServiceName(vflags.GetServiceName()),

@@ -26,7 +26,7 @@ type BlogServer struct {
 func NewBlogServer(postManager postmanager.PostManager, githubGetter *postmanager.GithubGetter, secretToken string, autoHookFileChange bool) *BlogServer {
 	ctx := handlers.NewContext(postManager)
 	router := vgin.NewGinEngine()
-	return &BlogServer{
+	bs := &BlogServer{
 		ctx:                ctx,
 		engine:             router,
 		secretToken:        secretToken,
@@ -34,18 +34,13 @@ func NewBlogServer(postManager postmanager.PostManager, githubGetter *postmanage
 		githubGetter:       githubGetter,
 		autoHookFileChange: autoHookFileChange,
 	}
+
+	lg.PanicError(bs.CheckPosts())
+	return bs
 }
 
 func (bs *BlogServer) CheckPosts() error {
 	ctx := context.Background()
-	count, err := bs.postManager.GetTotalPostCount(ctx)
-	if err != nil {
-		return err
-	}
-
-	if count != 0 {
-		return nil
-	}
 
 	posts, err := bs.githubGetter.GetPostList(ctx)
 	if err != nil {
