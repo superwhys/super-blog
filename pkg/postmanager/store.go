@@ -34,20 +34,25 @@ func (ps *PostStore) GetPostList(ctx context.Context, pagination models.Paginati
 	)
 
 	if pagination.Page == -1 && pagination.Size == -1 {
-		err = ps.db.Preload("Tags").Find(&blogs).Error
+		err = ps.db.Preload("Tags").Order("date desc").Find(&blogs).Error
 	} else {
 		offset := pagination.GetOffset()
 		size := pagination.Size
-		err = ps.db.Preload("Tags").Offset(offset).Limit(size).Find(&blogs).Error
+		err = ps.db.Preload("Tags").Offset(offset).Limit(size).Order("date desc").Find(&blogs).Error
 	}
 
 	if err != nil {
 		return nil, errors.Wrap(err, "getPostList")
 	}
 
+	total, err := ps.GetTotalPostCount(ctx)
+	if err != nil {
+		return nil, errors.Wrap(err, "getTotalPostCount")
+	}
+
 	return &models.BlogListItems{
 		Items: blogs,
-		Total: len(blogs),
+		Total: int(total),
 	}, nil
 }
 
