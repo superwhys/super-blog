@@ -9,10 +9,10 @@ import (
 	"github.com/superwhys/superBlog/models"
 	"github.com/superwhys/superBlog/pkg/postmanager"
 	"github.com/superwhys/superBlog/server"
-	"github.com/superwhys/venkit/dialer"
 	"github.com/superwhys/venkit/lg"
 	"github.com/superwhys/venkit/service"
 	"github.com/superwhys/venkit/vflags"
+	"github.com/superwhys/venkit/vgorm"
 	"golang.org/x/oauth2"
 )
 
@@ -22,9 +22,7 @@ var (
 	githubSecretToken  = vflags.String("githubSecretToken", "SjpvYt4nQVTZ", "set github webhook secret token")
 	basePostDir        = vflags.String("basePostDir", "./blog-posts", "set the github api token")
 	autoHookFileChange = vflags.Bool("autoHookFileChange", false, "Whether to automatically detect changes of file in github repository")
-	mysqlUser          = vflags.String("mysqlUser", "yong", "mysql user name")
-	mysqlPwd           = vflags.String("mysqlPwd", "kBcCfmwHFQtL", "mysql password")
-	mysqlDbName        = vflags.String("mysqlDbName", "blog", "mysql db name")
+	mysqlConfig        = vflags.Struct("mysqlConfig", (*vgorm.MysqlConfig)(nil), "mysql config")
 )
 
 func main() {
@@ -32,7 +30,10 @@ func main() {
 	if !lg.IsDebug() {
 		gin.SetMode(gin.ReleaseMode)
 	}
-	db, err := dialer.DialMysqlGorm("mysql", dialer.WithAuth(mysqlUser(), mysqlPwd()), dialer.WithDBName(mysqlDbName()))
+
+	mysqlConf := new(vgorm.MysqlConfig)
+	lg.PanicError(mysqlConfig(mysqlConf))
+	db, err := mysqlConf.DialGorm()
 	lg.PanicError(err)
 	db.AutoMigrate(&models.BlogItem{}, &models.Tag{})
 

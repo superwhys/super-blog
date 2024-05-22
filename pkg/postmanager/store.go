@@ -38,7 +38,7 @@ func (ps *PostStore) GetPostList(ctx context.Context, pagination models.Paginati
 	} else {
 		offset := pagination.GetOffset()
 		size := pagination.Size
-		err = ps.db.Preload("Tags").Find(&blogs).Offset(offset).Limit(size).Error
+		err = ps.db.Preload("Tags").Offset(offset).Limit(size).Find(&blogs).Error
 	}
 
 	if err != nil {
