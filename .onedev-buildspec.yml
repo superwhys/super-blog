@@ -36,7 +36,7 @@ jobs:
   - !BuildImageStep
     name: BuildImage
     output: !RegistryOutput
-      tags: onedev.hoven.com/superBlog:latest
+      tags: onedev.hoven.com/super-blog:latest
     platforms: linux/amd64
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   triggers:
