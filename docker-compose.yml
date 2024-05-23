@@ -3,8 +3,8 @@ services:
   super-blog:
     build: .
     container_name: super-blog 
-      # ports:
-      #   - 29913:29913
+    environment:
+      - VENKTI_SERVICE
     volumes:
       - ./blog-posts:/app/blog-posts
     networks:
