@@ -24,7 +24,7 @@ jobs:
   maxRetries: 3
   retryDelay: 30
   timeout: 3600
-- name: dockerBuild
+- name: DockerBuildWithTagCreate
   jobExecutor: dockerExecutor
   steps:
   - !CheckoutStep
@@ -37,7 +37,7 @@ jobs:
   - !BuildImageStep
     name: build image
     output: !RegistryOutput
-      tags: '@server@/@project_path@/@project_name@:latest @server@/@project_path@/@project_name@:@file:version@'
+      tags: '@server@/@project_path@/@project_name@:latest @server@/@project_path@/@project_name@:@tag@'
     builtInRegistryAccessTokenSecret: repo-token
     platforms: linux/amd64
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
@@ -46,6 +46,27 @@ jobs:
     tags: v*.*.*
     branches: main
     projects: super-blog
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  timeout: 3600
+- name: DockerBuildManual
+  jobExecutor: dockerExecutor
+  steps:
+  - !CheckoutStep
+    name: checkout code
+    cloneCredential: !DefaultCredential {}
+    withLfs: false
+    withSubmodules: false
+    cloneDepth: 1
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !BuildImageStep
+    name: build image
+    output: !RegistryOutput
+      tags: '@server@/@project_path@/@project_name@:latest @server@/@project_path@/@project_name@:dev'
+    builtInRegistryAccessTokenSecret: repo-token
+    platforms: linux/amd64
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   retryCondition: never
   maxRetries: 3
   retryDelay: 30
