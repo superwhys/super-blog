@@ -1,0 +1,25 @@
+version: 33
+jobs:
+- name: Push2Github
+  steps:
+  - !UseTemplateStep
+    name: Push2Github
+    templateName: Push2Github
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  triggers:
+  - !BranchUpdateTrigger {}
+  - !TagCreateTrigger
+    branches: main
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  timeout: 3600
+stepTemplates:
+- name: Push2Github
+  steps:
+  - !PushRepository
+    name: Push2Remote
+    remoteUrl: https://github.com/superwhys/superBlog
+    passwordSecret: Publish2GIthub
+    force: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
