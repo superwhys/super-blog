@@ -33,8 +33,15 @@ jobs:
   timeout: 3600
 - name: dockerBuild
   steps:
+  - !CheckoutStep
+    name: checkout code
+    cloneCredential: !DefaultCredential {}
+    withLfs: false
+    withSubmodules: false
+    cloneDepth: 1
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !BuildImageStep
-    name: BuildImage
+    name: build image
     output: !RegistryOutput
       tags: onedev.hoven.com/super-blog:latest
     platforms: linux/amd64
