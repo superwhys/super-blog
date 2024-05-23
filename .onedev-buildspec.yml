@@ -14,6 +14,23 @@ jobs:
   maxRetries: 3
   retryDelay: 30
   timeout: 3600
+- name: PullFromGithub
+  steps:
+  - !PullRepository
+    name: pullFromGithub
+    remoteUrl: https://github.com/superwhys/superBlog
+    passwordSecret: Publish2GIthub
+    refs: refs/heads/* refs/tags/*
+    withLfs: false
+    force: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  triggers:
+  - !ScheduleTrigger
+    cronExpression: 0 */1 * * * ?
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  timeout: 3600
 stepTemplates:
 - name: Push2Github
   steps:
