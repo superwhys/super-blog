@@ -3,7 +3,7 @@ package postmanager
 import (
 	"context"
 
-	"github.com/superwhys/superBlog/models"
+	"github.com/superwhys/super-blog/models"
 )
 
 type PostManager interface {

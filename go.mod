@@ -1,4 +1,4 @@
-module github.com/superwhys/superBlog
+module github.com/superwhys/super-blog
 
 go 1.20
 

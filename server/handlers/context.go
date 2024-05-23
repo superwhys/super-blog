@@ -3,7 +3,7 @@ package handlers
 import (
 	"context"
 
-	"github.com/superwhys/superBlog/pkg/postmanager"
+	"github.com/superwhys/super-blog/pkg/postmanager"
 	"github.com/superwhys/venkit/lg"
 )
 

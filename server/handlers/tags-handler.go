@@ -6,7 +6,7 @@ import (
 	"sort"
 
 	"github.com/gin-gonic/gin"
-	"github.com/superwhys/superBlog/models"
+	"github.com/superwhys/super-blog/models"
 	"github.com/superwhys/venkit/lg"
 	"github.com/superwhys/venkit/slices"
 )

@@ -16,17 +16,36 @@ jobs:
   timeout: 3600
 - name: PullFromGithub
   steps:
-  - !PullRepository
-    name: pullFromGithub
-    remoteUrl: https://github.com/superwhys/superBlog
-    passwordSecret: Publish2GIthub
-    refs: refs/heads/* refs/tags/*
+  - !UseTemplateStep
+    name: PullFromGithub
+    templateName: PullFromGithub
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  timeout: 3600
+- name: dockerBuild
+  jobExecutor: dockerExecutor
+  steps:
+  - !CheckoutStep
+    name: checkout code
+    cloneCredential: !DefaultCredential {}
     withLfs: false
-    force: false
+    withSubmodules: false
+    cloneDepth: 1
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !BuildImageStep
+    name: build image
+    output: !RegistryOutput
+      tags: '@server@/@project_path@/@project_name@:latest @server@/@project_path@/@project_name@:@file:version@'
+    builtInRegistryAccessTokenSecret: repo-token
+    platforms: linux/amd64
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   triggers:
-  - !ScheduleTrigger
-    cronExpression: 0 */1 * * * ?
+  - !TagCreateTrigger
+    tags: v*.*.*
+    branches: main
+    projects: super-blog
   retryCondition: never
   maxRetries: 3
   retryDelay: 30
@@ -36,7 +55,17 @@ stepTemplates:
   steps:
   - !PushRepository
     name: Push2Remote
-    remoteUrl: https://github.com/superwhys/superBlog
-    passwordSecret: Publish2GIthub
+    remoteUrl: https://github.com/superwhys/super-blog
+    passwordSecret: github-token
     force: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+- name: PullFromGithub
+  steps:
+  - !PullRepository
+    name: pullFromRemote
+    remoteUrl: https://github.com/superwhys/super-blog
+    passwordSecret: github-token
+    refs: refs/heads/* refs/tags/*
+    withLfs: false
+    force: true
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL

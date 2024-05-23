@@ -7,9 +7,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/gobuffalo/packr/v2"
-	"github.com/superwhys/superBlog/pkg/postmanager"
-	"github.com/superwhys/superBlog/server/handlers"
-	"github.com/superwhys/superBlog/server/handlers/middlewares"
+	"github.com/superwhys/super-blog/pkg/postmanager"
+	"github.com/superwhys/super-blog/server/handlers"
+	"github.com/superwhys/super-blog/server/handlers/middlewares"
 	"github.com/superwhys/venkit/lg"
 	"github.com/superwhys/venkit/vgin"
 )

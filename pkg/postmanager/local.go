@@ -10,7 +10,7 @@ import (
 	"sync"
 
 	"github.com/pkg/errors"
-	"github.com/superwhys/superBlog/models"
+	"github.com/superwhys/super-blog/models"
 	"github.com/superwhys/venkit/lg"
 )
 

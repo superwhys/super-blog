@@ -7,8 +7,8 @@ import (
 
 	"github.com/google/go-github/v53/github"
 	"github.com/pkg/errors"
-	"github.com/superwhys/superBlog/models"
-	"github.com/superwhys/superBlog/pkg/share"
+	"github.com/superwhys/super-blog/models"
+	"github.com/superwhys/super-blog/pkg/share"
 )
 
 type GithubGetter struct {

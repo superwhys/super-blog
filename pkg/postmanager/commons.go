@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
-	"github.com/superwhys/superBlog/models"
+	"github.com/superwhys/super-blog/models"
 	"gopkg.in/yaml.v3"
 )
 
