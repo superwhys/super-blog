@@ -43,7 +43,7 @@ jobs:
   - !BuildImageStep
     name: build image
     output: !RegistryOutput
-      tags: '@server@/@project_path@/default:v@build_number@'
+      tags: '@server@/super-blog:@tag@'
     platforms: linux/amd64
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   triggers:
