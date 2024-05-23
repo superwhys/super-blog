@@ -34,8 +34,7 @@ func PackResponseData(statusCode int, msg string, data any) *ApiResponseData {
 }
 
 type Tag struct {
-	gorm.Model
-	Tag string `gorm:"unique"`
+	Tag string `gorm:"primarykey"`
 }
 
 type MetaData struct {
