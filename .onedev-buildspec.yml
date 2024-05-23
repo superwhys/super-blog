@@ -50,7 +50,7 @@ jobs:
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   triggers:
   - !TagCreateTrigger
-    tags: v\d+\.\d+\.\d+
+    tags: v*.*.*
     branches: main
     projects: superBlog
   retryCondition: never
