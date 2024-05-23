@@ -32,6 +32,7 @@ jobs:
   retryDelay: 30
   timeout: 3600
 - name: dockerBuild
+  jobExecutor: dockerExecutor
   steps:
   - !CheckoutStep
     name: checkout code
@@ -43,7 +44,8 @@ jobs:
   - !BuildImageStep
     name: build image
     output: !RegistryOutput
-      tags: '@server@/super-blog:latest,@server@/super-blog:@file:version@'
+      tags: '@server@/@project_path@/@project_name@:latest @server@/@project_path@/@project_name@:@file:version@'
+    builtInRegistryAccessTokenSecret: repo-token
     platforms: linux/amd64
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   triggers:
