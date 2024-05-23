@@ -31,6 +31,23 @@ jobs:
   maxRetries: 3
   retryDelay: 30
   timeout: 3600
+- name: dockerBuild
+  steps:
+  - !BuildImageStep
+    name: BuildImage
+    output: !RegistryOutput
+      tags: onedev.hoven.com/superBlog:latest
+    platforms: linux/amd64
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  triggers:
+  - !TagCreateTrigger
+    tags: v\d+\.\d+\.\d+
+    branches: main
+    projects: superBlog
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  timeout: 3600
 stepTemplates:
 - name: Push2Github
   steps:
