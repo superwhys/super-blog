@@ -26,7 +26,7 @@ jobs:
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   triggers:
   - !ScheduleTrigger
-    cronExpression: 0 */1 * * * ?
+    cronExpression: 0 0 */2 * * ?
   retryCondition: never
   maxRetries: 3
   retryDelay: 30
