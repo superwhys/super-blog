@@ -1,11 +1,10 @@
 version: '3'
 services:
   super-blog:
-    build: .
+    image: registry.gitlab.hoven.com/hoven/super-blog:${IMAGE_VERSION}
     container_name: super-blog 
-    environment:
-      - VENKTI_SERVICE
     volumes:
+      - config:/app/config
       - ./blog-posts:/app/blog-posts
     networks:
       - yong-network

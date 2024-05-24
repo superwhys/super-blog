@@ -5,8 +5,6 @@ WORKDIR /app
 
 COPY ./ /app
 
-ARG SERVICE_NAME
-
 ENV GO111MODULE=auto
 ENV GOPROXY=https://goproxy.cn,direct
 RUN cd /app && \
@@ -18,11 +16,12 @@ RUN cd /app && \
 
 # runner
 FROM alpine:latest
+ARG VENKIT_SERVICE 
+ENV VENKIT_SERVICE=$VENKIT_SERVICE
 
 WORKDIR /app
 COPY --from=builder /app/server-go /app/server-go
-COPY ./config.yaml /app/config.yaml
-# COPY ./blog-posts /app/blog-posts
+ENV PATH="/app/server-go:${PATH}"
 
-ENTRYPOINT ["/app/server-go", "-f", "/app/config.yaml"]
+ENTRYPOINT ["server-go", "-f", "config/config.yaml"]
 
