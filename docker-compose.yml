@@ -3,8 +3,12 @@ services:
   super-blog:
     image: registry.gitlab.hoven.com/hoven/super-blog:${IMAGE_VERSION}
     container_name: super-blog 
+    env_file:
+      - ./deploy/.env
+    extra_hosts:
+      - host.docker.internal:host-gateway
     volumes:
-      - config:/app/config
+      - ./config:/app/config
       - ./blog-posts:/app/blog-posts
     networks:
       - yong-network
