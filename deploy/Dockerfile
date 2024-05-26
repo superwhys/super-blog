@@ -21,7 +21,7 @@ ENV VENKIT_SERVICE=$VENKIT_SERVICE
 
 WORKDIR /app
 COPY --from=builder /app/server-go /app/server-go
-ENV PATH="/app/server-go:${PATH}"
+COPY --from=builder /app/server-go /usr/local/bin/server-go
 
 ENTRYPOINT ["server-go", "-f", "config/config.yaml"]
 
